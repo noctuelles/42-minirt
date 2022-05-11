@@ -1,0 +1,63 @@
+t_ray	mk_ray(t_vec a, t_vec b)
+{
+	
+}
+
+t_ray	mk_cam_ray(int x, int y, t_window window, t_camera cam)
+{
+
+}
+
+char	cast_ray(t_ray ray, t_lst objs, t_rayhit *hit)
+{
+
+}
+
+t_col	get_pix_col(t_ray ray, t_scene scene)
+{
+	t_col		col;
+	t_vec		collision_point;
+	t_rayhit	tmp_hit;
+	int			i;
+	t_spot		spot;
+
+	col = black;
+	if (cast_ray(ray, scene.objs, &tmp_hit))
+	{
+		col = scene.ambient_light;
+		collision_point = tmp_hit.point;
+		i = -1;
+		while (++i < scene.nb_spots)
+		{
+			spot = scene.spots[i];
+			ray = mk_ray(obj_hit.point, spot.pos);
+			if (!cast_ray(ray, scene.objs, &tmp_hit))
+				col += spot.albedo / sqrt_dist(spot.pos, obj_hit.point);
+		}
+		col *= obj_hit.albedo;
+	}
+	return (col);
+} 
+
+void	render_img(int x, int y, t_image img, t_scene scene)
+{
+	int	x;
+	int	y;
+
+	x = -1;
+	while (++x < window.width)
+	{
+		y = -1;
+		while (++y < window.height)
+		{
+			ray = mk_ray(x, y, window, scene.cam);
+			img[x + y * window.width] = render_pix(ray, scene);
+		}
+	}
+}
+
+void	render(t_image *dst, t_window window, t_scene scene)
+{
+	render_img(dst);
+	update_window
+}
