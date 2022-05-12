@@ -6,14 +6,14 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 15:12:27 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/09 13:50:08 by plouvel          ###   ########.fr       */
+/*   Updated: 2022/05/12 16:40:17 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINIRT_LEXER_H
 # define MINIRT_LEXER_H
 
-# include "libft.h"
+//# include "libft.h"
 # include <stdint.h>
 # include <sys/types.h>
 # include <stdio.h>

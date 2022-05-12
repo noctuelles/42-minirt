@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test.c                                             :+:      :+:    :+:   */
+/*   header.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maabidal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/10 21:39:31 by maabidal          #+#    #+#             */
-/*   Updated: 2022/05/12 17:32:58 by maabidal         ###   ########.fr       */
+/*   Created: 2022/05/11 18:37:06 by maabidal          #+#    #+#             */
+/*   Updated: 2022/05/12 17:31:29 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//utilise pour tester les la mlx et le makefile aant d'avoir un vrai main
+#ifndef MAIN_H
+# define MAIN_H
 
-#include "header.h"
+//# include "libft.h"
+# include "mlx.h"
+//# include "minirt_parser.h"
+# include "minirt_types.h"
+//# include "minirt_lexer.h"
 
-int	main()
-{
-	void	*mlx_ptr;
-	void	*win_ptr;
-
-	mlx_ptr = mlx_init();
-	win_ptr = mlx_new_window(mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "miniRT");
-}
+# define WIN_WIDTH 1920
+# define WIN_HEIGHT 1080
+#endif

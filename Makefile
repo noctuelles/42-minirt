@@ -8,16 +8,16 @@ DEPS		=	$(OBJS:%.o=%.d)
 
 
 CC			=	cc
-CFLAGS		=	-g3 -Wall -Werror -Wextra -MMD
-INCLUDE		=	-I srcs/\
-				-I srcs/parsing\
-				-I srcs/libft\
-				-I srcs/mlx_11
+CFLAGS		=	-Wall -Werror -Wextra -MMD
 
-LIBS		=	srcs/libft/libft.a\
-				srcs/mlx_11/libmlx.a
+INCLUDE		=	-I ./srcs/\
+				-I ./srcs/mlx_x11/\
+				-I ./srcs/parsing
 
-LIBS_EXT	=	-lm
+LIBS		=	srcs/mlx_x11/libmlx.a#srcs/libft/libft.a\
+				
+
+LIBS_EXT	=	-lm -lXext -lX11
 
 
 all		:	$(NAME)
@@ -27,7 +27,7 @@ objs/%.o	:	srcs/%.c
 	@if [ ! -d $(dir $@) ]; then\
 		mkdir -p $(dir $@);\
 	fi
-	$(CC) ${CFLAGS} ${INCLUDE} -c $< -o $@
+	$(CC) ${CFLAGS} ${INCLUDE} -c ./$< -o $@
 
 $(NAME)	:	$(OBJS) $(LIBS)
 	$(CC) $(CFLAGS) $(OBJS) $(LIBS) $(LIBS_EXT) -o $(NAME)
