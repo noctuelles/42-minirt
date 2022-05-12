@@ -1,67 +1,78 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: maabidal <marvin@42.fr>                    +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/05/10 21:36:26 by maabidal          #+#    #+#              #
-#    Updated: 2022/05/10 21:40:02 by maabidal         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+NAME		=	miniRT
 
-NAME = miniRT
+SRCS		=	test.c
 
-INC = fractol.h
+_OBJS		=	${SRCS:.c=.o}
+OBJS		=	$(addprefix objs/, $(_OBJS))
+DEPS		=	$(OBJS:%.o=%.d)
 
-SRCS += test.c
 
-OBJS_DIR = obj/
-OBJS = $(addprefix $(OBJS_DIR),$(SRCS:.c=.o))
+CC			=	cc
+CFLAGS		=	-g3 -Wall -Werror -Wextra -MMD
+INCLUDE		=	-I srcs/\
+				-I srcs/parsing\
+				-I srcs/libft\
+				-I srcs/mlx_11
 
-CC = gcc -Wall -Wextra -Werror
+LIBS		=	srcs/libft/libft.a\
+				srcs/mlx_11/libmlx.a
 
-MLX_LIB	= $(MLX_DIR)libmlx.a
-ifeq ($(shell uname), Linux)
-	MLX_DIR = ./mlx_x11/
-	MLX_LNK	= -L $(MLX_DIR) -l mlx -lXext -lX11
-else
-	MLX_DIR = ./mlx_opengl/
-	MLX_LNK	= -L $(MLX_DIR) -l mlx -framework OpenGL -framework AppKit
-endif
+LIBS_EXT	=	-lm
 
-LFT_DIR = ./libft/
-LFT_LIB = $(LFT_DIR)libft.a
-LFT_LNK = -L $(LFT_DIR) -l ft
 
-all: $(NAME)
+all		:	$(NAME)
 
-$(NAME) : $(OBJS) $(MLX_LIB) $(LFT_LIB)
-	$(CC) $(OBJS) $(MLX_LNK) $(LFT_LNK) -lm -o $(NAME)
+-include $(DEPS)
+objs/%.o	:	srcs/%.c
+	@if [ ! -d $(dir $@) ]; then\
+		mkdir -p $(dir $@);\
+	fi
+	$(CC) ${CFLAGS} ${INCLUDE} -c $< -o $@
 
-$(OBJS): $(OBJS_DIR)%.o: %.c $(OBJS_DIR)
-	$(CC) -I $(MLX_DIR) -I $(LFT_DIR) -c $< -o $@
+$(NAME)	:	$(OBJS) $(LIBS)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBS) $(LIBS_EXT) -o $(NAME)
 
-$(OBJS_DIR):
-	mkdir $@
+$(LIBS)	:	FORCE
+	@for lib in $(LIBS); do\
+		echo $(MAKE) -C $$(dirname $$lib);\
+		$(MAKE) -C $$(dirname $$lib);\
+	done
 
-$(MLX_LIB):
-	$(MAKE) -C $(MLX_DIR)
+clean	:	
+	rm -Rf objs/
 
-$(LFT_LIB):
-	$(MAKE) -C $(LFT_DIR)
+cleanlibs	:
+	@for lib in $(LIBS); do\
+		echo make -C $$(dirname $$lib) clean;\
+		make -C $$(dirname $$lib) clean;\
+	done
 
-bonus : all
+cleanall	:	clean cleanlibs
 
-clean:
-	rm -rf $(OBJS)
-	$(MAKE) clean -C $(MLX_DIR)
-	$(MAKE) clean -C $(LFT_DIR)
 
-fclean: clean
-	rm -rf $(NAME)
-	$(MAKE) fclean -C $(LFT_DIR)
+fclean	:	clean
+	rm -f ${NAME}
 
-re: fclean all
+fcleanlibs	:
+	@for lib in $(LIBS); do\
+		echo make -C $$(dirname $$lib) fclean;\
+		make -C $$(dirname $$lib) fclean;\
+	done
 
-.PHONY: all clean fclean re
+fcleanall	:	fclean fcleanlibs
+
+
+re		:	fclean ${NAME}
+
+relibs	:	
+	@for lib in $(LIBS); do\
+		echo make -C $$(dirname $$lib) re;\
+		make -C $$(dirname $$lib) re;\
+	done
+
+reall	: relibs re
+
+
+bonus	:	$(NAME)
+
+.PHONY	:	all clean cleanlibs cleanall fclean fcleanlibs fcleanall re relibs reall FORCE bonus
