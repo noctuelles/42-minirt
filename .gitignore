@@ -2,3 +2,5 @@ obj/*
 obj
 miniRT
 *.swp
+srcs/mlx_x11/test/main.o
+srcs/mlx_x11/test/mlx-test

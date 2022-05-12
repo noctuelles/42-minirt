@@ -7,11 +7,19 @@ INC =	-I ./srcs\
 
 SRCS =	test.c
 
-MLX = srcs/mlx_x11/libmlx_Linux.a
+ifeq ($(shell uname), Linux)
+	MLX_DIR = ./srcs/mlx_x11/
+	MLX = ./srcs/mlx_x11/libmlx_Linux.a
+	LIB = -lXext -lX11 -lm -lbsd
+else
+	MLX_DIR = ./srcs/mlx_opengl/
+	MLX = ./srcs/mlx_x11/libmlx.a
+	LIB = -l mlx -framework OpenGL -framework AppKit -lm
+	MLX_LNK	= -L $(MLX_DIR) 
+endif
 LIBFT = inc/libft/libft.a
 
 CFLAGS = -Wall -Werror -Wextra
-LIB = -lXext -lX11 -lm -lbsd
 
 OBJDIR = objs
 SRCDIR = srcs
@@ -28,9 +36,9 @@ mlx :
 libft :
 		@echo -n "Compiling libft"
 		@make -s -C srcs/libft
-		@echo "\033[32m\t\t[OK]\033[0m"
+		@echo "\033[32m\t\t\t[OK]\033[0m"
 
-$(NAME) : mlx ${OBJS}
+$(NAME) : mlx libft ${OBJS}
 		@echo -n  "Generating ${NAME}"
 		@${CC} ${CFLAGS} ${OBJS} ${MLX} ${LIB} -o ${NAME} 
 		@echo "\033[32m\t\t[OK]\033[0m"
