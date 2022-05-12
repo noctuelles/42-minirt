@@ -3,7 +3,7 @@ NAME = miniRT
 INC =	-I ./srcs\
 		-I ./srcs/mlx_x11\
 		-I ./srcs/parsing\
-		-I ./srcs/libft
+		-I ./srcs/libft/includes
 
 SRCS =	test.c
 
@@ -41,6 +41,11 @@ libft :
 $(NAME) : mlx libft ${OBJS}
 		@echo -n  "Generating ${NAME}"
 		@${CC} ${CFLAGS} ${OBJS} ${MLX} ${LIB} -o ${NAME} 
+		@echo "\033[32m\t\t[OK]\033[0m"
+
+g3 : mlx libft ${OBJS}
+		@echo -n  "Generating ${NAME}"
+		@${CC} -g3 ${CFLAGS} ${OBJS} ${MLX} ${LIB} -o ${NAME} 
 		@echo "\033[32m\t\t[OK]\033[0m"
 
 bonus : $(NAME)
