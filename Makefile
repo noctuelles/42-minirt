@@ -1,78 +1,62 @@
-NAME		=	miniRT
+NAME = miniRT
 
-SRCS		=	test.c
+INC =	./srcs\
+		./srcs/mlx_x11\
+		./srcs/parsing\
+		./srcs/libft
 
-_OBJS		=	${SRCS:.c=.o}
-OBJS		=	$(addprefix objs/, $(_OBJS))
-DEPS		=	$(OBJS:%.o=%.d)
+SRCS =	test.c
 
+MLX = srcs/mlx_x11/libmlx_Linux.a
+LIBFT = inc/libft/libft.a
 
-CC			=	cc
-CFLAGS		=	-Wall -Werror -Wextra -MMD
+CFLAGS = -Wall -Werror -Wextra
+LIB = -lXext -lX11 -lm -lbsd
 
-INCLUDE		=	-I ./srcs/\
-				-I ./srcs/mlx_x11/\
-				-I ./srcs/parsing
+OBJDIR = objs
+SRCDIR = src
+INCDIR = inc
 
-LIBS		=	srcs/mlx_x11/libmlx.a#srcs/libft/libft.a\
-				
+OBJS = $(addprefix ${OBJDIR}/,${SRCS:.c=.o})
 
-LIBS_EXT	=	-lm -lXext -lX11
+all : ${NAME}
 
+mlx :
+		@echo -n "Compiling minilibx"
+		@make -s -C ./srcs/mlx_x11/ > /dev/null 2>&1
+		@echo "\033[32m\t\t\t[OK]\033[0m"
 
-all		:	$(NAME)
+libft :
+		@echo -n "Compiling libft"
+		@make -s -C srcs/libft
+		@echo "\033[32m\t\t\t\t[OK]\033[0m"
 
--include $(DEPS)
-objs/%.o	:	srcs/%.c
-	@if [ ! -d $(dir $@) ]; then\
-		mkdir -p $(dir $@);\
-	fi
-	$(CC) ${CFLAGS} ${INCLUDE} -c ./$< -o $@
+$(NAME) : mlx ${OBJS}
+		@echo -n  "Generating ${NAME}"
+		@${CC} ${CFLAGS} ${OBJS} -I./inc ${MLX} ${LIB} -o ${NAME} 
+		@echo "\033[32m\t\t\t[OK]\033[0m"
 
-$(NAME)	:	$(OBJS) $(LIBS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBS) $(LIBS_EXT) -o $(NAME)
+bonus : $(NAME)
 
-$(LIBS)	:	FORCE
-	@for lib in $(LIBS); do\
-		echo $(MAKE) -C $$(dirname $$lib);\
-		$(MAKE) -C $$(dirname $$lib);\
-	done
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
+		@mkdir -p ${@D}
+		@${CC} ${CFLAGS} ${DEFINE} -I./inc -c $< -o $@
+		
+clean :	
+		@echo -n "deleting mlx object files"
+		@make clean -s -Cinc/mlx_linux > /dev/null
+		@echo "\033[32m\t[OK]\033[0m"
+		@echo -n "deleting libft object files"
+		@make clean -s -Cinc/libft > /dev/null
+		@echo "\033[32m\t[OK]\033[0m"
+		@echo -n "deleting object files"
+		@rm -rf ${OBJDIR} > /dev/null
+		@echo "\033[32m\t\t[OK]\033[0m"
 
-clean	:	
-	rm -Rf objs/
+fclean : clean
+		@rm -rf ${NAME} ${MLX} ${LIBFT}
+		@echo "full clean\033[32m\t\t[OK]\033[0m"
 
-cleanlibs	:
-	@for lib in $(LIBS); do\
-		echo make -C $$(dirname $$lib) clean;\
-		make -C $$(dirname $$lib) clean;\
-	done
+re : fclean all
 
-cleanall	:	clean cleanlibs
-
-
-fclean	:	clean
-	rm -f ${NAME}
-
-fcleanlibs	:
-	@for lib in $(LIBS); do\
-		echo make -C $$(dirname $$lib) fclean;\
-		make -C $$(dirname $$lib) fclean;\
-	done
-
-fcleanall	:	fclean fcleanlibs
-
-
-re		:	fclean ${NAME}
-
-relibs	:	
-	@for lib in $(LIBS); do\
-		echo make -C $$(dirname $$lib) re;\
-		make -C $$(dirname $$lib) re;\
-	done
-
-reall	: relibs re
-
-
-bonus	:	$(NAME)
-
-.PHONY	:	all clean cleanlibs cleanall fclean fcleanlibs fcleanall re relibs reall FORCE bonus
+.PHONY: all, clean, fclean, re, libft, test, bonus, mlx, testbonus
