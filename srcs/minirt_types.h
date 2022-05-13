@@ -6,7 +6,7 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 15:23:32 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/10 19:24:58 by maabidal         ###   ########.fr       */
+/*   Updated: 2022/05/13 17:18:00 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,9 @@
 # define MINIRT_TYPES_H
 
 # include <stdint.h>
+# include "header_math.h"
 
 typedef uint32_t	t_col;
-
-typedef struct e_coord3d
-{
-	double	x;
-	double	y;
-	double	z;
-}				t_coord3d;
-typedef t_coord3d	t_vec;
 
 typedef struct e_ambiant_light
 {
@@ -31,38 +24,40 @@ typedef struct e_ambiant_light
 	uint32_t	rgb;
 }				t_ambiant_light;
 
+# define NEAR_PLANE 1
 typedef struct e_camera
 {
-	t_coord3d	coord;
-	t_coord3d	vec;
+	t_vec		pos;
+	t_vec		dir;
+	t_matrix	rotation;
 	uint8_t		fov;
 }				t_camera;
 
 typedef struct e_light
 {
-	t_coord3d	coord;
+	t_vec	coord;
 	float		ratio;
 	uint32_t	rgb;
 }				t_light;
 
 typedef struct e_sphere
 {
-	t_coord3d	coord;
-	double		diameter;
+	t_vec	center;
+	double		radius;
 	uint32_t	rgb;
 }				t_sphere;
 
 typedef struct e_plan
 {
-	t_coord3d	coord;
-	t_coord3d	vec;
+	t_vec	coord;
+	t_vec	vec;
 	uint32_t	rgb;
 }				t_plan;
 
 typedef struct e_cylinder
 {
-	t_coord3d	coord;
-	t_coord3d	vec;
+	t_vec	coord;
+	t_vec	vec;
 	double		diameter;
 	double		height;
 	uint32_t	rgb;

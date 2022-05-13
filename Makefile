@@ -3,9 +3,14 @@ NAME = miniRT
 INC =	-I ./srcs\
 		-I ./srcs/mlx_x11\
 		-I ./srcs/parsing\
-		-I ./srcs/libft/includes
+		-I ./srcs/libft/includes\
+		-I ./srcs/math/
 
-SRCS =	test.c
+SRCS =	test.c\
+		math/polynomial.c\
+		math/vectors.c\
+		math/vectors2.c\
+		math/vectors3.c
 
 ifeq ($(shell uname), Linux)
 	MLX_DIR = ./srcs/mlx_x11/
@@ -19,7 +24,7 @@ else
 endif
 LIBFT = inc/libft/libft.a
 
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -g3 
 
 OBJDIR = objs
 SRCDIR = srcs
@@ -41,11 +46,6 @@ libft :
 $(NAME) : mlx libft ${OBJS}
 		@echo -n  "Generating ${NAME}"
 		@${CC} ${CFLAGS} ${OBJS} ${MLX} ${LIB} -o ${NAME} 
-		@echo "\033[32m\t\t[OK]\033[0m"
-
-g3 : mlx libft ${OBJS}
-		@echo -n  "Generating ${NAME}"
-		@${CC} -g3 ${CFLAGS} ${OBJS} ${MLX} ${LIB} -o ${NAME} 
 		@echo "\033[32m\t\t[OK]\033[0m"
 
 bonus : $(NAME)
