@@ -6,7 +6,7 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 15:23:32 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/13 17:18:00 by maabidal         ###   ########.fr       */
+/*   Updated: 2022/05/16 14:22:14 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 # define MINIRT_TYPES_H
 
 # include <stdint.h>
-# include "header_math.h"
-
-typedef uint32_t	t_col;
+# include "ft_math.h"
+# include "mlx_colors.h"
 
 typedef struct e_ambiant_light
 {

@@ -6,7 +6,7 @@
 /*   By: maabidal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 21:39:31 by maabidal          #+#    #+#             */
-/*   Updated: 2022/05/13 18:57:24 by maabidal         ###   ########.fr       */
+/*   Updated: 2022/05/16 14:13:59 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,13 @@ int	cast_ray(t_ray ray, t_list *i_shapes, t_rayhit *hit)
 }
 */
 
-t_ray	mk_camray(t_camera cam, int x, int y)
+t_ray	mk_camray(t_camera cam, t_vec on_viewport)
 {
 	t_ray	ray;
 
 (void)cam;
-	ray.origin.x = (double)x / (double)WIN_WIDTH;
-	ray.origin.y = (double)y / (double)WIN_HEIGHT;
+	ray.origin.x = on_viewport.x / (double)WIN_WIDTH;
+	ray.origin.y = on_viewport.y / (double)WIN_HEIGHT;
 	ray.origin.z = 1.0;
 	ray.dir = normalized(ray.origin);
 	return (ray);
@@ -48,22 +48,26 @@ int	sphere_inters(t_sphere sphere, t_ray ray, double *inters)
 	t_vec	co;
 
 	co = dif(ray.origin, sphere.center);
-	a = dot(ray.dir, ray.dir);
+	a = sqrd_mag(ray.dir);
 	b = 2 * dot(co, ray.dir);
-	c = dot(co, co) - sphere.radius * sphere.radius;
+	c = sqrd_mag(co) - sphere.radius * sphere.radius;
 	return (solve_2nd_degree(a, b, c, inters));
 }
 
 //inters = intersections
-static t_col	 render_pix(int x, int y, t_camera cam, t_sphere sphere)
+//on_viewport is a 2d vector
+static t_col	 render_pix(t_vec on_viewport, t_camera cam, t_sphere sphere, t_vec light_dir)
 {
 	t_ray	cam_ray;
 	double	inters[2];
-	
-	cam_ray = mk_camray(cam, x, y);
+
+	cam_ray = mk_camray(cam, on_viewport);
 	if (sphere_inters(sphere, cam_ray, inters))
 		if (inters[0] >= 0 || inters[1] >= 0)
+		{
+
 			return (BLUE);
+		}
 	return (BLACK);
 }
 
@@ -71,10 +75,11 @@ static void render_img(t_col *img)
 {
 	int	x;
 	int	y;
+	t_vec	on_viewport;
 	t_sphere	sphere;
 	t_camera	cam;
 
-	sphere.center = new_v(0, 0, 15);
+	sphere.center = new_v(0, 0, 0);
 	sphere.radius = 5;
 	cam.dir = new_v(0, 0, 1);
 	cam.pos = new_v(0, 0, 0);
@@ -83,7 +88,11 @@ static void render_img(t_col *img)
 	{
 		y = -1;
 		while (++y < WIN_HEIGHT)
-			img[x + y * WIN_WIDTH] = render_pix(x, y, cam, sphere);
+		{
+			on_viewport.x = (double)x - (double)WIN_WIDTH / 2.0;
+			on_viewport.y = (double)WIN_HEIGHT / 2.0 - (double)y;
+			img[x + y * WIN_WIDTH] = render_pix(on_viewport, cam, sphere);
+		}
 	}
 }
 

@@ -1,20 +1,8 @@
 NAME = miniRT
 
-INC =	-I ./srcs\
-		-I ./srcs/mlx_x11\
-		-I ./srcs/parsing\
-		-I ./srcs/libft/includes\
-		-I ./srcs/math/
-
-SRCS =	test.c\
-		math/polynomial.c\
-		math/vectors.c\
-		math/vectors2.c\
-		math/vectors3.c
-
 ifeq ($(shell uname), Linux)
-	MLX_DIR = ./srcs/mlx_x11/
-	MLX = ./srcs/mlx_x11/libmlx_Linux.a
+	MLX_DIR = ./srcs/mlx/mlx_x11/
+	MLX = ./srcs/mlx/mlx_x11/libmlx_Linux.a
 	LIB = -lXext -lX11 -lm -lbsd
 else
 	MLX_DIR = ./srcs/mlx_opengl/
@@ -22,6 +10,22 @@ else
 	LIB = -l mlx -framework OpenGL -framework AppKit -lm
 	MLX_LNK	= -L $(MLX_DIR) 
 endif
+
+INC =	-I ./srcs\
+		-I ./srcs/mlx/mlx_x11/\
+		-I ./srcs/mlx/mlx_opengl/\
+		-I ./srcs/parsing\
+		-I ./srcs/libft/includes\
+		-I ./srcs/math/\
+		-I ./srcs/mlx_colors/
+
+SRCS =	test.c\
+		math/polynomial.c\
+		math/vectors.c\
+		math/vectors2.c\
+		math/vectors3.c\
+		mlx_colors/colors_utils.c
+
 LIBFT = inc/libft/libft.a
 
 CFLAGS = -Wall -Werror -Wextra -g3 
@@ -35,7 +39,7 @@ all : ${NAME}
 
 mlx :
 		@echo -n "Compiling minilibx"
-		@make -s -C ./srcs/mlx_x11/ > /dev/null 2>&1
+		@make -s -C ${MLX_DIR} > /dev/null 2>&1
 		@echo "\033[32m\t\t[OK]\033[0m"
 
 libft :
@@ -56,7 +60,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 		
 clean :	
 		@echo -n "deleting mlx object files"
-		@make clean -s -C srcs/mlx_x11 > /dev/null
+		@make clean -s -C ${MLX_DIR} > /dev/null
 		@echo "\033[32m\t[OK]\033[0m"
 		@echo -n "deleting libft object files"
 		@make clean -s -C srcs/libft > /dev/null

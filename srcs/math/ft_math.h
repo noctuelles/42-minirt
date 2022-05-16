@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   header_math.h                                      :+:      :+:    :+:   */
+/*   ft_math.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maabidal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 23:51:05 by maabidal          #+#    #+#             */
-/*   Updated: 2022/05/13 17:33:16 by maabidal         ###   ########.fr       */
+/*   Updated: 2022/05/16 14:19:26 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HEADER_MATH_H
-# define HEADER_MATH_H
+#ifndef FT_MAT_H
+# define FT_MAT_H
 # include <math.h>
 //vectors
 typedef struct s_vector3
