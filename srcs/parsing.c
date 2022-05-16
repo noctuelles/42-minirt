@@ -6,7 +6,7 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 11:11:55 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/09 14:54:48 by plouvel          ###   ########.fr       */
+/*   Updated: 2022/05/16 20:11:49 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_list	*route(t_parser *parser, t_token_type type)
 	obj = NULL;
 	if (type == T_AMBIANT_LIGHT)
 		obj = parse_ambiant_light(parser);
-	if (check_type(parser, T_NEWLINE, false) == false)
+	if (check_type(parser, T_NEWLINE, NULL,  false) == false)
 	{
 		free(obj);
 		return (NULL);

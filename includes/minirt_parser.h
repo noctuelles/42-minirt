@@ -6,7 +6,7 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 11:16:58 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/09 14:53:32 by plouvel          ###   ########.fr       */
+/*   Updated: 2022/05/16 20:11:50 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ typedef enum e_parser_errcode
 {
 	E_NO,
 	E_INVALID_VALUE,
+	E_VALUE_INVALID_CHARS,
+	E_RGB_INVALID_VALUE,
 	E_EXPECTED_COMMA,
 	E_EXPECTED_IDENTIFIER,
 	E_EXPECTED_VALUE,
@@ -35,6 +37,10 @@ typedef enum e_value_type
 }			t_value_type;
 
 # define STR_INVALID_VALUE       "invalid value '%s'"
+# define STR_RGB_INVALID_VALUE   "invalid value '%s'"
+# define STR_VALUE_INVALID_CHARS "invalid value '%s': value can only contains digits."
+# define STR_RGB_INVALID_RANGE   "invalid value '%s': must be within 0-255 range."
+# define STR_RATIO_INVALID_RANGE "invalid value '%s': must be within 0.0-0.1 range."
 # define STR_EXPECTED_COMMA      "expected comma after value '%s'"
 # define STR_EXPECTED_IDENTIFIER "expected identifier"
 # define STR_EXPECTED_VALUE      "expected value after '%s'"
@@ -50,7 +56,8 @@ typedef struct e_parser
 }				t_parser;
 
 void	consume(t_parser *parser, size_t n);
-void	*check_type(t_parser *parser, t_token_type type, bool do_consume);
+void	*check_rgb_component(t_parser *parser, char c, char *value,
+		uint32_t *rgb);
 void	*set_parser_errcode(t_parser *parser, t_parser_errcode errcode);
 bool	is_an_identifier(t_parser *parser);
 

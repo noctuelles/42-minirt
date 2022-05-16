@@ -6,7 +6,7 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 11:21:50 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/09 14:53:35 by plouvel          ###   ########.fr       */
+/*   Updated: 2022/05/16 20:11:48 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,65 +14,42 @@
 #include "minirt_types.h"
 #include <stdlib.h>
 
-bool	check_value(t_parser *parser)
+void	*check_rgb_component(t_parser *parser, char c, char *value,
+		uint32_t *rgb)
 {
-	char	*value;
-	bool	is_a_dot;
+	uint16_t	component_value;
 
-	is_a_dot = false;
-	value = parser->curr_tkn->value;
-	while (*value)
+	if (ft_strlen(value) <= 3 && ft_stronly_digits(value))
 	{
-		if (ft_isdigit(*value) == 0)
+		component_value = ft_atoi(value);
+		if (component_value >= 0 && component_value <= 255)
 		{
-			if (*value == '.')
-			{
-				if (!is_a_dot)
-					is_a_dot = true;
-				else
-					return (false);
-			}
-			else
-				return (false);
+			if (c == 'R')
+				*rgb = component_value;
+			else if (c == 'G')
+				*rgb |= component_value << 8;
+			else if (c == 'B')
+				*rgb |= component_value << 16;
 		}
-		value++;
+		else
+			return (set_parser_errcode(parser, E_RGB_INVALID_VALUE));
 	}
-	return (true);
-}
-
-void	*check_value_triplet(t_parser *parser)
-{
-	t_list	*save;
-
-	save = parser->list_tkns;
-	if (check_type(parser, T_VALUE, true) == NULL)
-		return (NULL);
-	if (check_type(parser, T_COMMA, true) == NULL)
-		return (NULL);
-	if (check_type(parser, T_VALUE, true) == NULL)
-		return (NULL);
-	if (check_type(parser, T_COMMA, true) == NULL)
-		return (NULL);
-	if (check_type(parser, T_VALUE, true) == NULL)
-		return (NULL);
-	if (check_type(parser, T_NEWLINE, true) == NULL)
-		return (NULL);
-	parser->list_tkns = save;
-	parser->curr_tkn = parser->list_tkns->content;
+	else
+		return (set_parser_errcode(parser, E_INVALID_VALUE));
 	return (parser);
 }
 
-void	*check_type(t_parser *parser, t_token_type type, bool do_consume)
+void	*check_type(t_parser *parser, t_token_type type, char **tkn_value,
+		bool do_consume)
 {
 	if (parser->curr_tkn->type == type)
 	{
-		if (type == T_VALUE)
-		{
-			if (check_value(parser) == false)
-				return (set_parser_errcode(parser, E_INVALID_VALUE));
-		}
 		if (do_consume)
+		{
+			if (tkn_value)
+				*tkn_value = parser->curr_tkn->value;
 			consume(parser, 1);
+		}
 		return (parser);
 	}
 	if (type == T_VALUE)
@@ -83,6 +60,50 @@ void	*check_type(t_parser *parser, t_token_type type, bool do_consume)
 		return (set_parser_errcode(parser, E_EXPECTED_NEWLINE));
 	return (NULL);
 }
+
+void	*parse_rgb(t_parser *parser, uint32_t *rgb)
+{
+	char	*tkn_value;
+
+	if (check_type(parser, T_VALUE, &tkn_value, true) == NULL
+			|| check_rgb_component(parser, 'R', tkn_value, rgb) == NULL)
+		return (NULL);
+	if (check_type(parser, T_COMMA, &tkn_value, true) == NULL)
+		return (NULL);
+	if (check_type(parser, T_VALUE, &tkn_value, true) == NULL
+			|| check_rgb_component(parser, 'G', tkn_value, rgb) == NULL)
+		return (NULL);
+	if (check_type(parser, T_COMMA, &tkn_value, true) == NULL)
+		return (NULL);
+	if (check_type(parser, T_VALUE, &tkn_value, true) == NULL
+			|| check_rgb_component(parser, 'B', tkn_value, rgb) == NULL)
+		return (NULL);
+	if (check_type(parser, T_NEWLINE, &tkn_value, true) == NULL)
+		return (NULL);
+	return (parser);
+}
+
+void	*parse_ratio(t_parser *parser, float *ratio)
+{
+	char	*tkn_value;
+
+	if (check_type(parser, T_VALUE, &tkn_value, true) == false)
+		return (NULL);
+	if (ft_strlen(tkn_value) < 3)
+		return (set_parser_errcode(parser, E_INVALID_VALUE));
+	if (tkn_value[0] != '0' || tkn_value[0] != '1' || tkn_value[1] != '.')
+		return (set_parser_errcode(parser, E_VALUE_INVALID_CHARS));
+	if (ft_stronly_digits(&tkn_value[2]))
+	{
+		*ratio = atof(tkn_value);
+		if (*ratio < 0.0 || *ratio > 1.0)
+			return (set_parser_errcode(parser, E_OUT_OF_RANGE));
+	}
+	else
+		return (set_parser_errcode(parser, E_INVALID_VALUE));
+	return (parser);
+}
+
 
 bool	is_an_identifier(t_parser *parser)
 {
@@ -100,33 +121,15 @@ bool	is_an_identifier(t_parser *parser)
 		return (false);
 }
 
-uint32_t	parse_rgb(t_parser *parser)
-{
-	uint32_t	rgb;
-
-	rgb = (uint8_t) ft_atoi(parser->curr_tkn->value);
-	consume(parser, 2);
-	rgb = (rgb << 8) |  (uint8_t) ft_atoi(parser->curr_tkn->value);
-	consume(parser, 2);
-	rgb = (rgb << 8) |  (uint8_t) ft_atoi(parser->curr_tkn->value);
-	consume(parser, 1);
-	return (rgb);
-}
-
 t_ambiant_light	*parse_ambiant_light(t_parser *parser)
 {
 	t_ambiant_light	*ambiant_light;
 	t_ambiant_light	obj;
 
-	if (check_type(parser, T_VALUE, false) == false)
+	if (parse_ratio(parser, &obj.ratio) == NULL)
 		return (NULL);
-	obj.ratio = atof(parser->curr_tkn->value);
-	if (obj.ratio < 0.0 || obj.ratio > 1.0)
-		return (set_parser_errcode(parser, E_OUT_OF_RANGE));
-	consume(parser, 1);
-	if (check_value_triplet(parser) == NULL)
+	if (parse_rgb(parser, &obj.rgb) == NULL)
 		return (NULL);
-	obj.rgb = parse_rgb(parser);
 	ambiant_light = malloc (sizeof(t_ambiant_light));
 	if (!ambiant_light)
 		return (set_parser_errcode(parser, E_MALLOC)); 
