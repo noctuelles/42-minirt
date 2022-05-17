@@ -6,7 +6,7 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 11:16:58 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/17 14:18:31 by plouvel          ###   ########.fr       */
+/*   Updated: 2022/05/17 17:06:47 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,19 @@ typedef enum e_value_type
 	V_RANGE
 }			t_value_type;
 
-# define STR_INVALID_VALUE       "minirt: line %u: invalid value '%s'"
-# define STR_INVALID_RANGE       "minirt: line %u: invalid value '%s': invalid range"
-# define STR_EXPECTED_COMMA      "minirt: line %u: expected comma after '%s'"
-# define STR_EXPECTED_IDENTIFIER "minirt: line %u: expected identifier after '%s'"
-# define STR_EXPECTED_VALUE      "minirt: line %u: expected value after '%s'"
-# define STR_EXPECTED_NEWLINE    "minirt: line %u: expected newline after '%s'"
+# define STR_INVALID_VALUE       "minirt: line %u: \
+invalid value '%s'"
+# define STR_INVALID_RANGE       "minirt: line %u: \
+invalid value '%s': invalid range"
+# define STR_EXPECTED_COMMA      "minirt: line %u: \
+expected comma after '%s'"
+# define STR_EXPECTED_IDENTIFIER "minirt: line %u: \
+expected identifier after '%s'"
+# define STR_EXPECTED_VALUE      "minirt: line %u: \
+expected value after '%s'"
+# define STR_EXPECTED_NEWLINE    "minirt: line %u: \
+expected newline after '%s'"
 
-# define NO_RANGE -999.0
 # define FOV_MIN  0
 # define FOV_MAX  180
 
@@ -51,6 +56,7 @@ typedef struct e_parser
 	t_list	*list_objs;
 	t_token	*curr_tkn;
 	int		errcode;
+	size_t	line_nbr;
 }				t_parser;
 
 void	consume(t_parser *parser, size_t n);
@@ -61,12 +67,13 @@ void	*check_type(t_parser *parser, t_token_type type, char **tkn_value,
 void	*set_parser_errcode(t_parser *parser, t_parser_errcode errcode);
 bool	is_an_identifier(t_parser *parser);
 
-t_ambiant_light	*parse_ambiant_light(t_parser *parser);
-t_camera		*parse_camera(t_parser *parser);
-t_light			*parse_light(t_parser *parser);
-t_sphere		*parse_sphere(t_parser *parser);
-t_plan			*parse_plan(t_parser *parser);
-t_cylinder		*parse_cylinder(t_parser *parser);
+t_list			*parse(t_list *list_tkns);
+t_object		*parse_ambiant_light(t_parser *parser);
+t_object		*parse_camera(t_parser *parser);
+t_object		*parse_light(t_parser *parser);
+t_object		*parse_sphere(t_parser *parser);
+t_object		*parse_plan(t_parser *parser);
+t_object		*parse_cylinder(t_parser *parser);
 
 /* io_utils.c */
 

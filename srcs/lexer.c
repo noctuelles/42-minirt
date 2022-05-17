@@ -6,11 +6,12 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 16:54:50 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/17 14:18:28 by plouvel          ###   ########.fr       */
+/*   Updated: 2022/05/17 17:06:43 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt_lexer.h"
+#include "minirt_parser.h"
 #include <stdlib.h>
 
 static void	*quit(t_lexer *lexer, t_lexer_errcode errcode)
@@ -92,7 +93,7 @@ t_list	*lex_from_file(const char *filename)
 	return (lexer.list_tkns);
 }
 
-/* char *translate(t_token_type type)
+char *translate(t_token_type type)
 {
 	if (type == 0)
 		return ("T_AMBIANT_LIGHT");
@@ -127,6 +128,43 @@ void	print_tokens(t_list *tkns)
 	}
 }
 
+void	print_objs(t_list *objs)
+{
+	char *translate[6] = {
+		"Ambiant Light",
+		"Camera",
+		"Light",
+		"Sphere",
+		"Plan",
+		"Cylinder"
+	};
+
+	for (t_list *elem = objs; elem; elem = elem->next)
+	{
+		t_object	*obj = elem->content;
+		printf( "Object type : <%s> \n\n"
+				"\tcoord   : %f %f %f\n"
+				"\tvec     : %f %f %f\n"
+				"\tratio   : %f\n"
+				"\tdiameter: %f\n"
+				"\theight  : %f\n"
+				"\tfov     : %u\n"
+				"\trgb     : %X\n\n",
+				translate[obj->type],
+				obj->coord.x,
+				obj->coord.y,
+				obj->coord.z,
+				obj->vec.x,
+				obj->vec.y,
+				obj->vec.z,
+				obj->ratio,
+				obj->diameter,
+				obj->height,
+				obj->fov,
+				obj->rgb);
+	}
+}
+
 int main(int argc, char **argv)
 {
 	if (argc > 1)
@@ -135,6 +173,12 @@ int main(int argc, char **argv)
 		if (test_list)
 		{
 			print_tokens(test_list);
+			puts("");
+			t_list	*obj = parse(test_list);
+			if (obj)
+				print_objs(obj);
+			else
+				puts("an error occured during the parsing.. :(");
 		}
 	}
-}*/
+}

@@ -6,7 +6,7 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 11:21:50 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/17 14:18:25 by plouvel          ###   ########.fr       */
+/*   Updated: 2022/05/17 17:06:37 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	*check_double_value(t_parser *parser, char *str, double *value,
 		}
 		else if (!(str[i] >= '0' && str[i] <= '9'))
 			return (set_parser_errcode(parser, E_INVALID_VALUE));
-		str++;
+		i++;
 	}
 	*value = strtod(str, NULL);
 	if ((range.r1 != range.r2) && !(*value >= range.r1 && *value <= range.r2))
@@ -134,7 +134,7 @@ void	*parse_coords(t_parser *parser, t_coord3d *coord, t_range range)
 	if (check_type(parser, T_COMMA, &tkn_value, true) == NULL)
 		return (NULL);
 	if (check_type(parser, T_VALUE, &tkn_value, true) == NULL
-			|| check_double_value(parser, tkn_value, &coord->y, range) == NULL)
+			|| check_double_value(parser, tkn_value, &coord->z, range) == NULL)
 		return (NULL);
 	return (parser);
 }
@@ -147,20 +147,18 @@ bool	is_an_identifier(t_parser *parser)
 	if (type == T_AMBIANT_LIGHT || type == T_CAMERA
 		|| type == T_LIGHT || type == T_SPHERE
 		|| type == T_PLAN || type == T_CYLINDER)
-	{
-		consume(parser, 1);
 		return (true);
-	}
 	else
 		return (false);
 }
 
-t_ambiant_light	*parse_ambiant_light(t_parser *parser)
+t_object	*parse_ambiant_light(t_parser *parser)
 {
-	t_ambiant_light	*ambiant_light;
-	t_ambiant_light	obj;
+	t_object	*ambiant_object;
+	t_object	obj;
 	char			*tkn_value;
 
+	obj.type = OBJ_AM_LIGHT;
 	if (check_type(parser, T_VALUE, &tkn_value, true) == NULL)
 		return (set_parser_errcode(parser, E_EXPECTED_VALUE));
 	if (check_double_value(parser, tkn_value, &obj.ratio, set_range(0, 1))
@@ -168,19 +166,21 @@ t_ambiant_light	*parse_ambiant_light(t_parser *parser)
 		return (NULL);
 	if (parse_rgb(parser, &obj.rgb) == NULL)
 		return (NULL);
-	ambiant_light = malloc (sizeof(t_ambiant_light));
-	if (!ambiant_light)
+	ambiant_object = ft_calloc (1, sizeof(t_object));
+	if (!ambiant_object)
 		return (set_parser_errcode(parser, E_MALLOC)); 
-	*ambiant_light = obj;
-	return (ambiant_light);
+	ambiant_object->ratio = obj.ratio;
+	ambiant_object->rgb = obj.rgb;
+	return (ambiant_object);
 }
 
-t_camera	*parse_camera(t_parser *parser)
+t_object	*parse_camera(t_parser *parser)
 {
-	t_camera	*camera;
-	t_camera	obj;
+	t_object	*camera;
+	t_object	obj;
 	char		*tkn_value;
 
+	obj.type = OBJ_CAMERA;
 	if (parse_coords(parser, &obj.coord, set_range(0.0, 0.0)) == NULL)
 		return (NULL);
 	if (parse_coords(parser, &obj.vec, set_range(-1.0, 1.0)) == NULL)
@@ -195,19 +195,20 @@ t_camera	*parse_camera(t_parser *parser)
 	}
 	else
 		return (set_parser_errcode(parser, E_INVALID_VALUE));
-	camera = malloc(sizeof(t_camera));
+	camera = ft_calloc(1, sizeof(t_object));
 	if (!camera)
 		return (set_parser_errcode(parser, E_MALLOC)); 
 	*camera = obj;
 	return (camera);
 }
 
-t_light	*parse_light(t_parser *parser)
+t_object	*parse_light(t_parser *parser)
 {
-	t_light	*light;
-	t_light	obj;
+	t_object	*light;
+	t_object	obj;
 	char	*tkn_value;
 
+	obj.type = OBJ_LIGHT;
 	if (parse_coords(parser, &obj.coord, set_range(0.0, 0.0)) == NULL)
 		return (NULL);
 	if (check_type(parser, T_VALUE, &tkn_value, true) == NULL)
@@ -215,19 +216,22 @@ t_light	*parse_light(t_parser *parser)
 	if (check_double_value(parser, tkn_value, &obj.ratio, set_range(0, 1))
 			== NULL)
 		return (NULL);
-	light = malloc(sizeof(t_light));
+	if (!parse_rgb(parser, &obj.rgb))
+		return (NULL);
+	light = ft_calloc(1, sizeof(t_object));
 	if (!light)
 		return (set_parser_errcode(parser, E_MALLOC)); 
 	*light = obj;
 	return (light);
 }
 
-t_sphere	*parse_sphere(t_parser *parser)
+t_object	*parse_sphere(t_parser *parser)
 {
-	t_sphere	*sphere;
-	t_sphere	obj;
+	t_object	*sphere;
+	t_object	obj;
 	char		*tkn_value;
 
+	obj.type = OBJ_SPHERE;
 	if (parse_coords(parser, &obj.coord, set_range(0.0, 0.0)) == NULL)
 		return (NULL);
 	if (check_type(parser, T_VALUE, &tkn_value, true) == NULL)
@@ -239,37 +243,39 @@ t_sphere	*parse_sphere(t_parser *parser)
 		return (NULL);
 	if (obj.diameter < 0)
 		return (set_parser_errcode(parser, E_INVALID_RANGE));
-	sphere = malloc(sizeof(t_sphere));
+	sphere = ft_calloc(1, sizeof(t_object));
 	if (!sphere)
 		return (set_parser_errcode(parser, E_MALLOC)); 
 	*sphere = obj;
 	return (sphere);
 }
 
-t_plan	*parse_plan(t_parser *parser)
+t_object	*parse_plan(t_parser *parser)
 {
-	t_plan	*plan;
-	t_plan	obj;
+	t_object	*plan;
+	t_object	obj;
 
+	obj.type = OBJ_PLAN;
 	if (parse_coords(parser, &obj.coord, set_range(0.0, 0.0)) == NULL)
 		return (NULL);
 	if (parse_coords(parser, &obj.vec, set_range(-1.0, 1.0)) == NULL)
 		return (NULL);
 	if (parse_rgb(parser, &obj.rgb) == NULL)
 		return (NULL);
-	plan = malloc(sizeof(t_plan));
+	plan = ft_calloc(1, sizeof(t_object));
 	if (!plan)
 		return (set_parser_errcode(parser, E_MALLOC)); 
 	*plan = obj;
 	return (plan);
 }
 
-t_cylinder	*parse_cylinder(t_parser *parser)
+t_object	*parse_cylinder(t_parser *parser)
 {
-	t_cylinder	*cylinder;
-	t_cylinder	obj;
+	t_object	*cylinder;
+	t_object	obj;
 	char		*tkn_value;
 
+	obj.type = OBJ_CYLINDER;
 	if (parse_coords(parser, &obj.coord, set_range(0.0, 0.0)) == NULL)
 		return (NULL);
 	if (parse_coords(parser, &obj.vec, set_range(-1.0, 1.0)) == NULL)
@@ -285,7 +291,7 @@ t_cylinder	*parse_cylinder(t_parser *parser)
 		return (NULL);
 	if (parse_rgb(parser, &obj.rgb) == NULL)
 		return (NULL);
-	cylinder = malloc(sizeof(t_cylinder));
+	cylinder = ft_calloc(1, sizeof(t_object));
 	if (!cylinder)
 		return (set_parser_errcode(parser, E_MALLOC)); 
 	*cylinder = obj;

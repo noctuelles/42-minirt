@@ -6,7 +6,7 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 11:11:55 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/17 14:18:25 by plouvel          ###   ########.fr       */
+/*   Updated: 2022/05/17 17:06:39 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,14 @@ void	consume(t_parser *parser, size_t n)
 	while (i++ < n)
 	{
 		parser->list_tkns = parser->list_tkns->next;
-		parser->curr_tkn = parser->list_tkns->content;
+		if (parser->list_tkns)
+			parser->curr_tkn = parser->list_tkns->content;
 	}
 }
 
-void	*get_obj_from_type(t_parser *parser, t_token_type type)
+static t_object	*get_obj_from_type(t_parser *parser, t_token_type type)
 {
-	void	*obj;
+	t_object	*obj;
 
 	obj = NULL;
 	if (type == T_AMBIANT_LIGHT)
@@ -42,7 +43,7 @@ void	*get_obj_from_type(t_parser *parser, t_token_type type)
 	else if (type == T_PLAN)
 		obj = parse_plan(parser);
 	else if (type == T_CYLINDER)
-		obj = parse_plan(parser);
+		obj = parse_cylinder(parser);
 	return (obj);
 }
 
@@ -51,6 +52,7 @@ t_list	*get_obj(t_parser *parser, t_token_type type)
 	t_list	*elem;
 	void	*obj;
 
+	consume(parser, 1);
 	obj = get_obj_from_type(parser, type);
 	if (!check_type(parser, T_NEWLINE, NULL, true))
 		return (NULL);
@@ -72,10 +74,6 @@ t_list	*get_obj(t_parser *parser, t_token_type type)
 
 static void	*quit(t_parser *parser)
 {
-	if (parser->errcode)
-	{
-
-	}
 	ft_lstclear(&parser->list_objs, free);
 }
 
@@ -84,6 +82,7 @@ t_list	*parse(t_list *list_tkns)
 	t_parser	parser;
 	t_list		*elem;
 
+	ft_memset(&parser, 0 ,sizeof(t_parser));
 	parser.list_tkns = list_tkns;
 	parser.curr_tkn = list_tkns->content;
 	while (parser.list_tkns)
@@ -92,7 +91,6 @@ t_list	*parse(t_list *list_tkns)
 			return (set_parser_errcode(&parser, E_EXPECTED_IDENTIFIER));
 		elem = get_obj(&parser, parser.curr_tkn->type);
 		ft_lstadd_back(&parser.list_objs, elem);
-		consume(&parser, 1);
 	}
 	return (parser.list_objs);
 }
