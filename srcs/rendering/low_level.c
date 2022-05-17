@@ -1,29 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   header.h                                           :+:      :+:    :+:   */
+/*   low_level.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maabidal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/11 18:37:06 by maabidal          #+#    #+#             */
-/*   Updated: 2022/05/18 01:03:35 by maabidal         ###   ########.fr       */
+/*   Created: 2022/05/18 00:32:37 by maabidal          #+#    #+#             */
+/*   Updated: 2022/05/18 00:34:59 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MAIN_H
-# define MAIN_H
-# define WIN_WIDTH 800
-# define WIN_HEIGHT 800
-# define HALF_WIDTH WIN_WIDTH / 2
-# define HALF_HEIGHT WIN_HEIGHT / 2
+#include "rendering.h"
 
-# include "libft.h"
-# include "mlx.h"
-# include "mlx_colors.h"
-//# include "minirt_parser.h"
-//# include "minirt_lexer.h"
-# include "ft_math.h"
-# include "scene.h"
-# include <stdint.h>
-# include <stdlib.h>
-#endif
+int	sphere_ray_cast(t_sphere sphere, t_ray ray)
+{
+
+}
+
+/*
+int	plane_ray_cast(t_plane plane, t_ray ray)
+{
+
+}
+
+int	cylinder_ray_cast(t_sphere cylinder, t_ray ray)
+{
+
+}
+
+int	2nd_degree_shape_ray_cast(t_??, t_ray ray)
+{
+
+}
+*/

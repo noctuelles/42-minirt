@@ -1,29 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minirt_types.h                                     :+:      :+:    :+:   */
+/*   scene.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: maabidal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/07 15:23:32 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/17 18:19:24 by maabidal         ###   ########.fr       */
+/*   Created: 2022/05/18 00:55:22 by maabidal          #+#    #+#             */
+/*   Updated: 2022/05/18 01:03:18 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINIRT_TYPES_H
-# define MINIRT_TYPES_H
+#ifndef SCENE_H
+# define SCENE_H
 
-# include <stdint.h>
-# include "ft_math.h"
-# include "mlx_colors.h"
+# include "header.h"
 
-typedef struct e_ambiant_light
+typedef int (t_ray_caster)(void *, t_ray);
+
+typedef struct s_scene
 {
-	float		ratio;
-	uint32_t	rgb;
-}				t_ambiant_light;
+	t_list		*objs;
+	t_list		*lights;
+	t_camera	camera;
+	t_col 		ambiant_light;
+}	t_scene;
 
-# define NEAR_PLANE 1
+typedef struct s_obj_interface
+{
+	t_ray_caster	ray_caster;
+	void			*obj;
+}	t_obj_interface;
+
 typedef struct e_camera
 {
 	t_vec		pos;
@@ -34,39 +41,31 @@ typedef struct e_camera
 
 typedef struct e_light
 {
-	t_vec	pos;
-	float		ratio;
-	uint32_t	rgb;
+	t_vec		pos;
+	double		ratio;
+	t_col		rgb;
 }				t_light;
 
 typedef struct e_sphere
 {
-	t_vec	center;
+	t_vec		center;
 	double		radius;
-	uint32_t	rgb;
+	t_col		rgb;
 }				t_sphere;
 
 typedef struct e_plan
 {
-	t_vec	pos;
-	t_vec	vec;
-	uint32_t	rgb;
+	t_vec		pos;
+	t_vec		vec;
+	t_col		rgb;
 }				t_plan;
 
 typedef struct e_cylinder
 {
-	t_vec	pos;
-	t_vec	vec;
-	double		diameter;
+	t_vec		pos;
+	t_vec		vec;
+	double		radius;
 	double		height;
-	uint32_t	rgb;
+	t_col		rgb;
 }				t_cylinder;
-
-typedef struct s_rayhit
-{
-	t_col	albedo;
-	t_vec	point;
-	t_vec	normal;
-	double	dist;
-}	t_rayhit;
 #endif

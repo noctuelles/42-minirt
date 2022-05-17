@@ -3,3 +3,30 @@
 -camera rotation
 -parsing
 -window gestion
+
+----------------------------------------------------------------
+-rendering/
+	
+	-low_level.c
+		-sphere-ray cast
+		-cylinder-ray cast
+		-plane-ray cast
+		-2nd degree shape-ray cast
+
+	-high_level.c
+		-render img
+		-render pixel
+		-mk_cam_ray
+		-cast ray trhough objects
+		-get spot light colors
+
+-main
+	-main
+	-setup mlx
+	-resize
+	-close
+	-free mlx
+		Used by both close and setup, 
+		in case something goes wrong.
+
+---------------------------------------------------------------

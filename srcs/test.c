@@ -6,7 +6,7 @@
 /*   By: maabidal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 21:39:31 by maabidal          #+#    #+#             */
-/*   Updated: 2022/05/17 21:40:57 by maabidal         ###   ########.fr       */
+/*   Updated: 2022/05/18 00:41:53 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,13 @@ int	sphere_inter(t_sphere sphere, t_ray ray, double *inter)
 }
 
 //inter = intersections
-//on_viewport is a 2d vector
 //no need to clamp scalar product when passing it to mult_color
 //my_light_intensity	= 1.0 / sqrd(dist + 1)
+
+//if cam_ray hits object
+//	return ambient col + spot lights cols
+//else
+//	return BLACK
 static t_col	 render_pix(t_ray cam_ray, t_sphere sphere, t_light light)
 {
 	double	inter;
