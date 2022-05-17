@@ -6,7 +6,7 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 16:54:50 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/17 17:06:43 by plouvel          ###   ########.fr       */
+/*   Updated: 2022/05/17 17:35:21 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,6 +179,8 @@ int main(int argc, char **argv)
 				print_objs(obj);
 			else
 				puts("an error occured during the parsing.. :(");
+			ft_lstclear(&test_list, free_token);
+			ft_lstclear(&obj, free);
 		}
 	}
 }

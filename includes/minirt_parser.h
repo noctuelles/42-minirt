@@ -6,7 +6,7 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 11:16:58 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/17 17:25:16 by plouvel          ###   ########.fr       */
+/*   Updated: 2022/05/17 17:30:58 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ typedef enum e_value_type
 }			t_value_type;
 
 # define STR_INVALID_VALUE       "minirt: line %u: '%s': \
-invalid value '%s'\n"
+invalid value.\n"
 # define STR_INVALID_RANGE       "minirt: line %u: '%s': \
-invalid value '%s': invalid range\n"
+invalid range.\n"
 # define STR_EXPECTED_COMMA      "minirt: line %u: '%s': \
 expected comma.\n"
 # define STR_EXPECTED_IDENTIFIER "minirt: line %u: '%s': \
@@ -54,6 +54,7 @@ typedef struct e_parser
 {
 	t_list	*list_tkns;
 	t_list	*list_objs;
+	char	*last_tkn_value;
 	t_token	*curr_tkn;
 	int		errcode;
 	size_t	line_nbr;

@@ -6,7 +6,7 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 11:11:55 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/17 17:22:34 by plouvel          ###   ########.fr       */
+/*   Updated: 2022/05/17 17:35:34 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	consume(t_parser *parser, size_t n)
 	i = 0;
 	while (i++ < n)
 	{
+		parser->last_tkn_value = parser->curr_tkn->value;
 		parser->list_tkns = parser->list_tkns->next;
 		if (parser->list_tkns)
 			parser->curr_tkn = parser->list_tkns->content;
@@ -77,11 +78,18 @@ t_list	*get_obj(t_parser *parser, t_token_type type)
 
 static void	*quit(t_parser *parser, t_parser_errcode errcode)
 {
+	char	*tkn_value;
+
 	if (errcode != E_KEEP)
 		parser->errcode = errcode;
 	ft_lstclear(&parser->list_objs, free);
+	if (parser->errcode == E_INVALID_VALUE
+			|| parser->errcode == E_INVALID_RANGE)
+		tkn_value = parser->last_tkn_value;
+	else
+		tkn_value = parser->curr_tkn->value;
 	print_parser_errmsg(get_parser_err_msg(parser->errcode), parser->line_nbr,
-			parser->curr_tkn->value);
+			tkn_value);
 	return (NULL);
 }
 
