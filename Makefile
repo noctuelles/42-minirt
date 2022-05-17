@@ -24,16 +24,18 @@ SRCS =	test.c\
 		math/vectors.c\
 		math/vectors2.c\
 		math/vectors3.c\
-		mlx_colors/colors_utils.c
+		mlx_colors/color_color_ops.c\
+		mlx_colors/color_scalar_ops.c
 
 LIBFT = inc/libft/libft.a
 
-CFLAGS = -Wall -Werror -Wextra -g3 
+CFLAGS = -Wall -Werror -Wextra -g3 -MMD
 
 OBJDIR = objs
 SRCDIR = srcs
 
 OBJS = $(addprefix ${OBJDIR}/,${SRCS:.c=.o})
+DEPS = $(OBJS:%.o=%.d)
 
 all : ${NAME}
 

@@ -6,7 +6,7 @@
 /*   By: maabidal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 23:51:05 by maabidal          #+#    #+#             */
-/*   Updated: 2022/05/16 14:19:26 by maabidal         ###   ########.fr       */
+/*   Updated: 2022/05/17 18:36:59 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ t_vec		mul_d(t_vec v, double d);
 t_vec		sum(t_vec a, t_vec b);
 t_vec		dif(t_vec a, t_vec b);
 t_vec		mul(t_vec a, t_vec b);
-t_vec		div(t_vec num, t_vec denum);
+//div funciton already exists in stdlib
+t_vec		di(t_vec num, t_vec denum);
 t_vec		normalized(t_vec v);
 //vector operation
 double	magnitude(t_vec v);
@@ -50,11 +51,13 @@ typedef struct s_matrix
 //t_matrix	angles_to_roatation(t_vec angles);
 //t_matrix	dir_to_rotation(t_vec angles);
 
-//polynomials
+//algebra
 //quadratic
+# define DEG2RAD 0.0174533
 # define CLOSEST 0
 # define FURTHEST 1
 int		solve_2nd_degree(double a, double b, double c, double *solutions);
+double	sqrd(double a);
 
 //ray
 typedef struct s_ray

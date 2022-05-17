@@ -6,7 +6,7 @@
 /*   By: maabidal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 18:37:06 by maabidal          #+#    #+#             */
-/*   Updated: 2022/05/16 14:29:46 by maabidal         ###   ########.fr       */
+/*   Updated: 2022/05/17 18:02:16 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@
 # include "ft_math.h"
 # include "minirt_types.h"
 # include <stdint.h>
+# include <stdlib.h>
 
-# define WIN_WIDTH 500
-# define WIN_HEIGHT 500
+# define WIN_WIDTH 800
+# define WIN_HEIGHT 800
+# define HALF_WIDTH WIN_WIDTH / 2
+# define HALF_HEIGHT WIN_HEIGHT / 2
 #endif

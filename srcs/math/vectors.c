@@ -6,11 +6,11 @@
 /*   By: maabidal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 21:59:39 by maabidal          #+#    #+#             */
-/*   Updated: 2022/05/13 00:35:17 by maabidal         ###   ########.fr       */
+/*   Updated: 2022/05/16 15:42:03 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header_math.h"
+#include "ft_math.h"
 
 t_vec	sum(t_vec a, t_vec b)
 {

@@ -6,7 +6,7 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 15:23:32 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/16 14:22:14 by maabidal         ###   ########.fr       */
+/*   Updated: 2022/05/17 18:19:24 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ typedef struct e_camera
 
 typedef struct e_light
 {
-	t_vec	coord;
+	t_vec	pos;
 	float		ratio;
 	uint32_t	rgb;
 }				t_light;
@@ -48,14 +48,14 @@ typedef struct e_sphere
 
 typedef struct e_plan
 {
-	t_vec	coord;
+	t_vec	pos;
 	t_vec	vec;
 	uint32_t	rgb;
 }				t_plan;
 
 typedef struct e_cylinder
 {
-	t_vec	coord;
+	t_vec	pos;
 	t_vec	vec;
 	double		diameter;
 	double		height;

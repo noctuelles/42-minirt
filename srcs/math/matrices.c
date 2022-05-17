@@ -6,11 +6,11 @@
 /*   By: maabidal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 00:24:35 by maabidal          #+#    #+#             */
-/*   Updated: 2022/05/13 17:30:16 by maabidal         ###   ########.fr       */
+/*   Updated: 2022/05/16 15:41:19 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header_math.h"
+#include "ft_math.h"
 
 t_matrix	angles_to_rotation(t_vec angles)
 {

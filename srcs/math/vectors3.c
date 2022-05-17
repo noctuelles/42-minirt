@@ -6,11 +6,11 @@
 /*   By: maabidal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 17:24:49 by maabidal          #+#    #+#             */
-/*   Updated: 2022/05/13 17:33:02 by maabidal         ###   ########.fr       */
+/*   Updated: 2022/05/16 15:41:54 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header_math.h"
+#include "ft_math.h"
 
 t_vec	new_v(double x, double y, double z)
 {
