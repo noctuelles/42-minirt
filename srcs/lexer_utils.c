@@ -6,47 +6,13 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 16:56:35 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/07 17:59:56 by plouvel          ###   ########.fr       */
+/*   Updated: 2022/05/17 14:04:25 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minirt_lexer.h"
 #include <stdlib.h>
-
-t_token	set_token(char *str, t_token_type type)
-{
-	t_token	tkn;
-
-	tkn.value = str;
-	tkn.type = type;
-	if (str)
-		tkn.len = ft_strlen(str);
-	return (tkn);
-}
-
-t_token	*new_token(char *str, size_t len, t_token_type type)
-{
-	t_token	*tkn;
-
-	tkn = malloc(sizeof(t_token));
-	if (!tkn)
-		return (NULL);
-	tkn->value = str;
-	tkn->len = len;
-	tkn->type = type;
-	return (tkn);
-}
-
-void	free_token(void *token)
-{
-	t_token	*tkn;
-
-	tkn = token;
-	if (tkn->type == T_VALUE)
-		free(tkn->value);
-	free(tkn);
-}
 
 t_token	search_known_token(const char *str)
 {
@@ -71,4 +37,54 @@ t_token	search_known_token(const char *str)
 	if (ft_strncmp(str, STR_TAB, 1) == 0)
 		return (set_token(STR_TAB, T_BREAK));
 	return (set_token(NULL, T_NULL));
+}
+
+void	*add_known_token_to_list(t_lexer *lexer)
+{
+	lexer->line += lexer->tkn.len;
+	if (lexer->tkn.type != T_BREAK)
+	{
+		if (lexer->tkn.type == T_AMBIANT_LIGHT)
+			lexer->declared_ambiant_light++;
+		if (lexer->tkn.type == T_CAMERA)
+			lexer->declared_camera++;
+		if (lexer->tkn.type == T_LIGHT)
+			lexer->declared_light++;
+		if (add_token_to_list(lexer, lexer->tkn.value, lexer->tkn.len,
+					lexer->tkn.type) == NULL)
+			return (NULL);
+	}
+	lexer->prev = lexer->line;
+	return (lexer);
+}
+
+t_token	*add_token_to_list(t_lexer *lexer, char *value, size_t len,
+		t_token_type type)
+{
+	char	*str;
+	t_list	*elem;
+	t_token	*tkn;
+
+	str = value;
+	if (type == T_VALUE)
+	{
+		str = ft_strndup(value, len);
+		if (!str)
+			return (NULL);
+	}
+	tkn = new_token(str, len, type);
+	if (!tkn)
+	{
+		if (str != value)
+			free(str);
+		return (NULL);
+	}
+	elem = ft_lstnew(tkn);
+	if (!elem)
+	{
+		free_token(tkn);
+		return (NULL);
+	}
+	ft_lstadd_back(&lexer->list_tkns, elem);
+	return (tkn);
 }

@@ -6,7 +6,7 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 11:11:55 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/16 20:11:49 by plouvel          ###   ########.fr       */
+/*   Updated: 2022/05/17 14:18:25 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,19 +26,34 @@ void	consume(t_parser *parser, size_t n)
 	}
 }
 
-t_list	*route(t_parser *parser, t_token_type type)
+void	*get_obj_from_type(t_parser *parser, t_token_type type)
 {
-	t_list	*elem;
 	void	*obj;
 
 	obj = NULL;
 	if (type == T_AMBIANT_LIGHT)
 		obj = parse_ambiant_light(parser);
-	if (check_type(parser, T_NEWLINE, NULL,  false) == false)
-	{
-		free(obj);
+	else if (type == T_CAMERA)
+		obj = parse_camera(parser);
+	else if (type == T_LIGHT)
+		obj = parse_light(parser);
+	else if (type == T_SPHERE)
+		obj = parse_sphere(parser);
+	else if (type == T_PLAN)
+		obj = parse_plan(parser);
+	else if (type == T_CYLINDER)
+		obj = parse_plan(parser);
+	return (obj);
+}
+
+t_list	*get_obj(t_parser *parser, t_token_type type)
+{
+	t_list	*elem;
+	void	*obj;
+
+	obj = get_obj_from_type(parser, type);
+	if (!check_type(parser, T_NEWLINE, NULL, true))
 		return (NULL);
-	}
 	if (!obj)
 	{
 		if (errno)
@@ -55,6 +70,15 @@ t_list	*route(t_parser *parser, t_token_type type)
 	return (elem);
 }
 
+static void	*quit(t_parser *parser)
+{
+	if (parser->errcode)
+	{
+
+	}
+	ft_lstclear(&parser->list_objs, free);
+}
+
 t_list	*parse(t_list *list_tkns)
 {
 	t_parser	parser;
@@ -66,7 +90,7 @@ t_list	*parse(t_list *list_tkns)
 	{
 		if (!is_an_identifier(&parser))
 			return (set_parser_errcode(&parser, E_EXPECTED_IDENTIFIER));
-		elem = route(&parser, parser.curr_tkn->type);
+		elem = get_obj(&parser, parser.curr_tkn->type);
 		ft_lstadd_back(&parser.list_objs, elem);
 		consume(&parser, 1);
 	}

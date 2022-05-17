@@ -6,7 +6,7 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 11:16:58 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/16 20:11:50 by plouvel          ###   ########.fr       */
+/*   Updated: 2022/05/17 14:18:31 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,10 @@ typedef enum e_parser_errcode
 {
 	E_NO,
 	E_INVALID_VALUE,
-	E_VALUE_INVALID_CHARS,
-	E_RGB_INVALID_VALUE,
+	E_INVALID_RANGE,
 	E_EXPECTED_COMMA,
 	E_EXPECTED_IDENTIFIER,
 	E_EXPECTED_VALUE,
-	E_OUT_OF_RANGE,
 	E_MALLOC,
 	E_EXPECTED_NEWLINE
 }				t_parser_errcode;
@@ -36,16 +34,16 @@ typedef enum e_value_type
 	V_RANGE
 }			t_value_type;
 
-# define STR_INVALID_VALUE       "invalid value '%s'"
-# define STR_RGB_INVALID_VALUE   "invalid value '%s'"
-# define STR_VALUE_INVALID_CHARS "invalid value '%s': value can only contains digits."
-# define STR_RGB_INVALID_RANGE   "invalid value '%s': must be within 0-255 range."
-# define STR_RATIO_INVALID_RANGE "invalid value '%s': must be within 0.0-0.1 range."
-# define STR_EXPECTED_COMMA      "expected comma after value '%s'"
-# define STR_EXPECTED_IDENTIFIER "expected identifier"
-# define STR_EXPECTED_VALUE      "expected value after '%s'"
-# define STR_OUT_OF_RANGE        "value out of range '%s'"
-# define STR_EXPECTED_NEWLINE    "expected newline after '%s'"
+# define STR_INVALID_VALUE       "minirt: line %u: invalid value '%s'"
+# define STR_INVALID_RANGE       "minirt: line %u: invalid value '%s': invalid range"
+# define STR_EXPECTED_COMMA      "minirt: line %u: expected comma after '%s'"
+# define STR_EXPECTED_IDENTIFIER "minirt: line %u: expected identifier after '%s'"
+# define STR_EXPECTED_VALUE      "minirt: line %u: expected value after '%s'"
+# define STR_EXPECTED_NEWLINE    "minirt: line %u: expected newline after '%s'"
+
+# define NO_RANGE -999.0
+# define FOV_MIN  0
+# define FOV_MAX  180
 
 typedef struct e_parser
 {
@@ -58,9 +56,20 @@ typedef struct e_parser
 void	consume(t_parser *parser, size_t n);
 void	*check_rgb_component(t_parser *parser, char c, char *value,
 		uint32_t *rgb);
+void	*check_type(t_parser *parser, t_token_type type, char **tkn_value,
+		bool do_consume);
 void	*set_parser_errcode(t_parser *parser, t_parser_errcode errcode);
 bool	is_an_identifier(t_parser *parser);
 
 t_ambiant_light	*parse_ambiant_light(t_parser *parser);
+t_camera		*parse_camera(t_parser *parser);
+t_light			*parse_light(t_parser *parser);
+t_sphere		*parse_sphere(t_parser *parser);
+t_plan			*parse_plan(t_parser *parser);
+t_cylinder		*parse_cylinder(t_parser *parser);
+
+/* io_utils.c */
+
+const char	*get_parser_errmsg(t_parser_errcode errcode);
 
 #endif

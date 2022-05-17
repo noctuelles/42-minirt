@@ -6,7 +6,7 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 15:23:32 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/16 20:11:51 by plouvel          ###   ########.fr       */
+/*   Updated: 2022/05/17 14:18:31 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,15 @@ typedef struct e_coord3d
 }				t_coord3d;
 typedef t_coord3d	t_vec;
 
+typedef struct	e_range
+{
+	double r1;
+	double r2;
+}		t_range;
+
 typedef struct e_ambiant_light
 {
-	float		ratio;
+	double		ratio;
 	uint32_t	rgb;
 }				t_ambiant_light;
 
@@ -41,7 +47,7 @@ typedef struct e_camera
 typedef struct e_light
 {
 	t_coord3d	coord;
-	float		ratio;
+	double		ratio;
 	uint32_t	rgb;
 }				t_light;
 
@@ -75,4 +81,5 @@ typedef struct s_rayhit
 	t_vec	normal;
 	double	dist;
 }	t_rayhit;
+
 #endif
