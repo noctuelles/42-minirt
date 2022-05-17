@@ -6,7 +6,7 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 11:16:58 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/17 17:30:58 by plouvel          ###   ########.fr       */
+/*   Updated: 2022/05/17 17:43:19 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,26 @@ t_object		*parse_sphere(t_parser *parser);
 t_object		*parse_plan(t_parser *parser);
 t_object		*parse_cylinder(t_parser *parser);
 
-/* io_utils.c */
+/* parsing_objs_utils.c */
 
-const char	*get_parser_errmsg(t_parser_errcode errcode);
+void	*check_rgb_component(t_parser *parser, char c, char *value,
+		uint32_t *rgb);
+void	*check_double_value(t_parser *parser, char *str, double *value,
+		t_range range);
+void	*check_type(t_parser *parser, t_token_type type, char **tkn_value,
+		bool do_consume);
+void	*parse_rgb(t_parser *parser, uint32_t *rgb);
+void	*parse_coords(t_parser *parser, t_coord3d *coord, t_range range);
+bool	is_an_identifier(t_parser *parser);
 
+
+
+
+static inline t_range	set_range(double r1, double r2)
+{
+	t_range	range;
+	range.r1 = r1;
+	range.r2 = r2;
+	return (range);
+}
 #endif
