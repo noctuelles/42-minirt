@@ -6,7 +6,7 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 15:38:25 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/17 14:18:29 by plouvel          ###   ########.fr       */
+/*   Updated: 2022/05/17 17:20:21 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,10 @@ void	*print_error_line_nbr(const char *error_msg, size_t line_nbr)
 	return (NULL);
 }
 
-const char	*get_parser_errmsg(t_parser_errcode errcode)
+void	*print_parser_errmsg(const char *error_msg, size_t line_nbr,
+		const char *tkn_value)
 {
-
+	ft_putstr_fd("Error\n", STDERR_FILENO);
+	ft_dprintf(STDERR_FILENO, error_msg, line_nbr + 1, tkn_value); 
+	return (NULL);
 }

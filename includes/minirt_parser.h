@@ -6,7 +6,7 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 11:16:58 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/17 17:06:47 by plouvel          ###   ########.fr       */
+/*   Updated: 2022/05/17 17:25:16 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 typedef enum e_parser_errcode
 {
-	E_NO,
+	E_KEEP,
 	E_INVALID_VALUE,
 	E_INVALID_RANGE,
 	E_EXPECTED_COMMA,
@@ -34,18 +34,18 @@ typedef enum e_value_type
 	V_RANGE
 }			t_value_type;
 
-# define STR_INVALID_VALUE       "minirt: line %u: \
-invalid value '%s'"
-# define STR_INVALID_RANGE       "minirt: line %u: \
-invalid value '%s': invalid range"
-# define STR_EXPECTED_COMMA      "minirt: line %u: \
-expected comma after '%s'"
-# define STR_EXPECTED_IDENTIFIER "minirt: line %u: \
-expected identifier after '%s'"
-# define STR_EXPECTED_VALUE      "minirt: line %u: \
-expected value after '%s'"
-# define STR_EXPECTED_NEWLINE    "minirt: line %u: \
-expected newline after '%s'"
+# define STR_INVALID_VALUE       "minirt: line %u: '%s': \
+invalid value '%s'\n"
+# define STR_INVALID_RANGE       "minirt: line %u: '%s': \
+invalid value '%s': invalid range\n"
+# define STR_EXPECTED_COMMA      "minirt: line %u: '%s': \
+expected comma.\n"
+# define STR_EXPECTED_IDENTIFIER "minirt: line %u: '%s': \
+expected identifier.\n"
+# define STR_EXPECTED_VALUE      "minirt: line %u: '%s': \
+expected value.\n"
+# define STR_EXPECTED_NEWLINE    "minirt: line %u: '%s': \
+expected newline.\n"
 
 # define FOV_MIN  0
 # define FOV_MAX  180
@@ -67,6 +67,7 @@ void	*check_type(t_parser *parser, t_token_type type, char **tkn_value,
 void	*set_parser_errcode(t_parser *parser, t_parser_errcode errcode);
 bool	is_an_identifier(t_parser *parser);
 
+const char	*get_parser_err_msg(t_parser_errcode errcode);
 t_list			*parse(t_list *list_tkns);
 t_object		*parse_ambiant_light(t_parser *parser);
 t_object		*parse_camera(t_parser *parser);

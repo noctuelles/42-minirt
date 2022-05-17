@@ -6,7 +6,7 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 11:11:55 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/17 17:06:39 by plouvel          ###   ########.fr       */
+/*   Updated: 2022/05/17 17:22:34 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,6 @@ t_list	*get_obj(t_parser *parser, t_token_type type)
 
 	consume(parser, 1);
 	obj = get_obj_from_type(parser, type);
-	if (!check_type(parser, T_NEWLINE, NULL, true))
-		return (NULL);
 	if (!obj)
 	{
 		if (errno)
@@ -63,18 +61,28 @@ t_list	*get_obj(t_parser *parser, t_token_type type)
 		else
 			return (NULL);
 	}
-	elem = ft_lstnew(obj);
-	if (!elem)
+	else
 	{
-		free(obj);
-		return (set_parser_errcode(parser, E_MALLOC));
+		if (!check_type(parser, T_NEWLINE, NULL, true))
+			return (NULL);
+		elem = ft_lstnew(obj);
+		if (!elem)
+		{
+			free(obj);
+			return (set_parser_errcode(parser, E_MALLOC));
+		}
 	}
 	return (elem);
 }
 
-static void	*quit(t_parser *parser)
+static void	*quit(t_parser *parser, t_parser_errcode errcode)
 {
+	if (errcode != E_KEEP)
+		parser->errcode = errcode;
 	ft_lstclear(&parser->list_objs, free);
+	print_parser_errmsg(get_parser_err_msg(parser->errcode), parser->line_nbr,
+			parser->curr_tkn->value);
+	return (NULL);
 }
 
 t_list	*parse(t_list *list_tkns)
@@ -88,9 +96,12 @@ t_list	*parse(t_list *list_tkns)
 	while (parser.list_tkns)
 	{
 		if (!is_an_identifier(&parser))
-			return (set_parser_errcode(&parser, E_EXPECTED_IDENTIFIER));
+			return (quit(&parser, E_EXPECTED_IDENTIFIER));
 		elem = get_obj(&parser, parser.curr_tkn->type);
+		if (!elem)
+			return (quit(&parser, E_KEEP));
 		ft_lstadd_back(&parser.list_objs, elem);
+		parser.line_nbr++;
 	}
 	return (parser.list_objs);
 }

@@ -6,7 +6,7 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 15:12:27 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/17 14:18:30 by plouvel          ###   ########.fr       */
+/*   Updated: 2022/05/17 17:16:05 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,8 @@ size_t	get_file_nbr_lines(int fd);
 void	*print_error(const char *error_msg);
 void	*print_error_function(const char *function);
 void	*print_error_line_nbr(const char *error_msg, size_t line_nbr);
+void	*print_parser_errmsg(const char *error_msg, size_t line_nbr,
+		const char *tkn_value);
 
 /* tokens.c */
 
