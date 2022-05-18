@@ -6,27 +6,13 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 11:11:55 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/17 17:37:26 by plouvel          ###   ########.fr       */
+/*   Updated: 2022/05/18 15:10:39 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt_parser.h"
 #include <errno.h>
 #include <stdlib.h>
-
-void	consume(t_parser *parser, size_t n)
-{
-	size_t	i;
-
-	i = 0;
-	while (i++ < n)
-	{
-		parser->last_tkn_value = parser->curr_tkn->value;
-		parser->list_tkns = parser->list_tkns->next;
-		if (parser->list_tkns)
-			parser->curr_tkn = parser->list_tkns->content;
-	}
-}
 
 static t_object	*get_obj_from_type(t_parser *parser, t_token_type type)
 {
@@ -48,7 +34,7 @@ static t_object	*get_obj_from_type(t_parser *parser, t_token_type type)
 	return (obj);
 }
 
-t_list	*get_obj(t_parser *parser, t_token_type type)
+static t_list	*get_obj(t_parser *parser, t_token_type type)
 {
 	t_list	*elem;
 	void	*obj;

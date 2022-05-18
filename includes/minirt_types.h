@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt_types.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: plouvel <plouvel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/07 15:23:32 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/17 17:43:22 by plouvel          ###   ########.fr       */
+/*   Created: 2022/05/18 15:15:56 by plouvel           #+#    #+#             */
+/*   Updated: 2022/05/18 15:22:49 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,19 @@
 
 # include <stdint.h>
 
+/******************************************************************************
+ *                              Typedef & Enum                                *
+ *****************************************************************************/
+
 typedef uint32_t	t_col;
 
-typedef struct e_coord3d
+typedef struct e_vec3d
 {
 	double	x;
 	double	y;
 	double	z;
 }				t_coord3d;
+
 typedef t_coord3d	t_vec;
 
 typedef struct	e_range
@@ -65,8 +70,8 @@ typedef struct	e_object
 	double			ratio;
 	double			diameter;
 	double			height;
-	uint32_t		fov;
-	uint32_t		rgb;
+	unsigned int	fov;
+	unsigned int	rgb;
 }				t_object;
 
 typedef struct s_rayhit

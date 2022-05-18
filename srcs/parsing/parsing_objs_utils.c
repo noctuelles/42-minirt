@@ -6,7 +6,7 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 17:37:35 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/17 17:43:17 by plouvel          ###   ########.fr       */
+/*   Updated: 2022/05/18 15:21:06 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	*check_double_value(t_parser *parser, char *str, double *value,
 			return (set_parser_errcode(parser, E_INVALID_VALUE));
 		i++;
 	}
-	*value = strtod(str, NULL);
+	*value = ft_atof(str);
 	if ((range.r1 != range.r2) && !(*value >= range.r1 && *value <= range.r2))
 		return (set_parser_errcode(parser, E_INVALID_RANGE));
 	return (parser);
@@ -128,17 +128,4 @@ void	*parse_coords(t_parser *parser, t_coord3d *coord, t_range range)
 			|| check_double_value(parser, tkn_value, &coord->z, range) == NULL)
 		return (NULL);
 	return (parser);
-}
-
-bool	is_an_identifier(t_parser *parser)
-{
-	t_token_type	type;
-
-	type = parser->curr_tkn->type;
-	if (type == T_AMBIANT_LIGHT || type == T_CAMERA
-		|| type == T_LIGHT || type == T_SPHERE
-		|| type == T_PLAN || type == T_CYLINDER)
-		return (true);
-	else
-		return (false);
 }

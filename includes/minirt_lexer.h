@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt_lexer.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: plouvel <plouvel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/07 15:12:27 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/17 17:43:20 by plouvel          ###   ########.fr       */
+/*   Created: 2022/05/18 15:22:59 by plouvel           #+#    #+#             */
+/*   Updated: 2022/05/18 15:25:01 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@
 # include <sys/types.h>
 # include <stdio.h>
 # include <stdbool.h>
+
+/******************************************************************************
+ *                                  Macros                                    *
+ *****************************************************************************/
 
 # define STR_AMBIANT_LIGHT    "A"
 # define STR_CAMERA           "C"
@@ -47,6 +51,10 @@ declared more than once.\n"
 # define STR_FUNCTION_READ          "read"
 # define STR_FUNCTION_OPEN          "open"
 # define STR_FUNCTION_MALLOC        "malloc"
+
+/******************************************************************************
+ *                              Typedef & Enum                                *
+ *****************************************************************************/
 
 typedef enum e_token_type
 {
@@ -92,6 +100,10 @@ typedef struct e_lexer
 	t_lexer_errcode		errcode;
 }				t_lexer;
 
+/******************************************************************************
+ *                            Functions Prototype                             *
+ *****************************************************************************/
+
 /* file.c */
 
 char	**read_file(const char *filename);
@@ -106,7 +118,7 @@ void	*print_error(const char *error_msg);
 void	*print_error_function(const char *function);
 void	*print_error_line_nbr(const char *error_msg, size_t line_nbr);
 void	*print_parser_errmsg(const char *error_msg, size_t line_nbr,
-		const char *tkn_value);
+			const char *tkn_value);
 
 /* tokens.c */
 
@@ -119,7 +131,6 @@ void	free_token(void *token);
 void	*add_known_token_to_list(t_lexer *lexer);
 t_token	search_known_token(const char *str);
 t_token	*add_token_to_list(t_lexer *lexer, char *value, size_t len,
-		t_token_type type);
-
+			t_token_type type);
 
 #endif

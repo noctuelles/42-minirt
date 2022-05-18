@@ -6,7 +6,7 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 15:38:25 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/17 17:43:21 by plouvel          ###   ########.fr       */
+/*   Updated: 2022/05/18 15:25:46 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,14 @@ void	*print_error(const char *error_msg)
 void	*print_error_function(const char *function)
 {
 	ft_dprintf(STDERR_FILENO, "Error\nminirt: %s: %s.\n", function,
-			strerror(errno));
+		strerror(errno));
 	return (NULL);
 }
 
 void	*print_error_line_nbr(const char *error_msg, size_t line_nbr)
 {
 	ft_putstr_fd("Error\n", STDERR_FILENO);
-	ft_dprintf(STDERR_FILENO, error_msg, line_nbr + 1); 
+	ft_dprintf(STDERR_FILENO, error_msg, line_nbr + 1);
 	return (NULL);
 }
 
@@ -41,6 +41,6 @@ void	*print_parser_errmsg(const char *error_msg, size_t line_nbr,
 		const char *tkn_value)
 {
 	ft_putstr_fd("Error\n", STDERR_FILENO);
-	ft_dprintf(STDERR_FILENO, error_msg, line_nbr + 1, tkn_value); 
+	ft_dprintf(STDERR_FILENO, error_msg, line_nbr + 1, tkn_value);
 	return (NULL);
 }
