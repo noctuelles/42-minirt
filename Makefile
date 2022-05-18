@@ -17,15 +17,18 @@ INC =	-I ./srcs\
 		-I ./srcs/parsing\
 		-I ./srcs/libft/includes\
 		-I ./srcs/math/\
-		-I ./srcs/mlx_colors/
+		-I ./srcs/mlx_colors/\
+		-I ./srcs/rendering/
 
-SRCS =	test.c\
+SRCS =	main.c\
 		math/polynomial.c\
 		math/vectors.c\
 		math/vectors2.c\
 		math/vectors3.c\
 		mlx_colors/color_color_ops.c\
-		mlx_colors/color_scalar_ops.c
+		mlx_colors/color_scalar_ops.c\
+		rendering/low_level.c\
+		rendering/high_level.c
 
 LIBFT = inc/libft/libft.a
 
@@ -77,4 +80,4 @@ fclean : clean
 
 re : fclean all
 
-.PHONY: all, clean, fclean, re, libft, test, bonus, mlx, testbonus
+l.PHONY: all, clean, fclean, re, libft, test, bonus, mlx, testbonus

@@ -6,7 +6,7 @@
 /*   By: maabidal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 00:52:11 by maabidal          #+#    #+#             */
-/*   Updated: 2022/05/18 00:54:38 by maabidal         ###   ########.fr       */
+/*   Updated: 2022/05/18 23:50:11 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,23 @@
 # include "mlx_colors.h"
 # include "scene.h"
 
+# ifndef BOOL
+#  define BOOL uint8_t 
+#  define FALSE 0
+#  define TRUE 1
+# endif
+# ifndef RAYHIT
+#  define RAYHIT
 typedef struct s_rayhit
 {
-	t_col	col;
+	t_col	albedo;
 	t_vec	point;
 	t_vec	normal;
-	double	dist;
+	double	t;
 }	t_rayhit;
+# endif 
 
-int		sphere_ray_cast(t_sphere sphere, t_ray ray);
+t_ray	mk_camray(t_camera cam, int x, int y);
+BOOL	sphere_raycast(void *sphere, t_ray ray, t_rayhit *hit);
 void	render_img(t_col *img, t_scene scene);
 #endif

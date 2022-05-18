@@ -6,7 +6,7 @@
 /*   By: maabidal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 21:39:31 by maabidal          #+#    #+#             */
-/*   Updated: 2022/05/18 00:41:53 by maabidal         ###   ########.fr       */
+/*   Updated: 2022/05/18 22:13:01 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,6 @@ t_camera	cam;
 t_light	light;
 
 light.pos = new_v(-5, 8, 10);
-sphere.center = new_v(0, 0, 15);
-sphere.radius = 5;
 cam.dir = new_v(0, 0, 1);
 cam.pos = new_v(0, 0, 0);
 cam.fov = 70.0;

@@ -6,62 +6,60 @@
 /*   By: maabidal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 00:35:04 by maabidal          #+#    #+#             */
-/*   Updated: 2022/05/18 00:46:13 by maabidal         ###   ########.fr       */
+/*   Updated: 2022/05/19 00:01:04 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rendering.h"
 
-static void	cast_ray_through_objects(t_ray ray, t_list *objs)
+static BOOL	cast_ray(t_ray ray, t_list *objs, t_rayhit *hit)
 {
+	int				next;
+	t_obj_interface	*interface;
 
+	if (objs == NULL)
+		return (FALSE);
+	next = cast_ray(ray, objs->next, hit);
+	interface = (t_obj_interface *)objs->content;
+	return (interface->ray_caster(interface->obj, ray, hit) || next);
 }
 
-static t_col	get_spot_lights_colors(t_ray ray, t_list *objs, t_list *lights)
+static t_ray new_ray(t_vec origin, t_vec direction)
 {
+	t_ray ray;
 
-}
-//-recadrage: obtenir une valeur entre -1 et 1
-//creer canvas_scale 
-//-map to canvas
-static t_ray	mk_camray(t_camera cam, int x, int y)
-{
-	t_ray	ray;
-	t_vec	canvas_scale;
-
-	ray.origin.x = ((double)x - (double)HALF_WIDTH) / (double)HALF_WIDTH;
-	ray.origin.y = ((double)HALF_HEIGHT - (double)y) / (double)HALF_HEIGHT;
-	canvas_scale.x = tan(DEG2RAD * cam.fov);
-	canvas_scale.y = canvas_scale.x * ((double)WIN_HEIGHT / (double)WIN_WIDTH);
-	ray.origin = mul(ray.origin, canvas_scale);
-	ray.origin.z = 1.0;
-	ray.dir = normalized(ray.origin);
+	ray.origin = origin;
+	ray.dir = direction;
 	return (ray);
 }
 
-
-static void	render_pixel(t_scene, t_ray cam_ray)
+static t_col	render_pixel(t_scene scene, t_ray cam_ray)
 {
-	double	inter;
+	t_rayhit	hit;
+	t_vec		to_light;
+	double		lighting;
+	t_col		col;
 
-	if (sphere_inter(sphere, cam_ray, &inter))
+	hit.t = DBL_MAX;
+	if (cast_ray(cam_ray, scene.objs, &hit))
 	{
-		t_vec	point = sum(mul_d(cam_ray.dir, inter), cam_ray.origin);
-		t_vec	normal = normalized(dif(point, sphere.center));
-		t_vec	point_to_light = dif(light.pos, point);
-		double	dot_scalar = dot(normal, normalized(point_to_light));
-		double	distance_scalar = 100.0 / sqrd(magnitude(point_to_light) + 1.0);
-		t_col	point_col = mult_color_scalar(0x00601A5F, dot_scalar * distance_scalar);
-		t_col	ambient_col = mult_colors(0x00601A5F, 0x00900A0F);
-		return (add_colors(point_col, ambient_col));
+		col = mult_colors(hit.albedo, scene.ambiant_light);
+		to_light = dif(scene.light.pos, hit.point);
+		if (!cast_ray(new_ray(hit.point, normalized(to_light)), scene.objs, &hit))
+		{
+			lighting = dot(hit.normal, normalized(to_light));
+			lighting *= scene.light.intensity / sqrd(magnitude(to_light) + 1.0);
+			col = add_colors(col, mult_color_scalar(hit.albedo, lighting));
+		}
+		return (col);
 	}
 	return (BLACK);
 }
 
 void	render_img(t_col *img, t_scene scene)
 {
-	int	x;
-	int	y;
+	int		x;
+	int		y;
 	t_ray	cam_ray;
 
 	x = -1;
@@ -70,8 +68,8 @@ void	render_img(t_col *img, t_scene scene)
 		y = -1;
 		while (++y < WIN_HEIGHT)
 		{
-			cam_ray = mk_camray(cam, x, y);
-			img[x + y * WIN_WIDTH] = render_pix(cam_ray, scene);
+			cam_ray = mk_camray(scene.camera, x, y);
+			img[x + y * WIN_WIDTH] = render_pixel(scene, cam_ray);
 		}
 	}
 }

@@ -1,3 +1,4 @@
+-make raytracer
 -plan (prendre en compte le cas ou le plan et parallele au ray)
 -cylindre(utiliser le code de plan pour cylindre)
 -camera rotation
@@ -6,7 +7,6 @@
 
 ----------------------------------------------------------------
 -rendering/
-	
 	-low_level.c
 		-sphere-ray cast
 		-cylinder-ray cast
@@ -18,7 +18,6 @@
 		-render pixel
 		-mk_cam_ray
 		-cast ray trhough objects
-		-get spot light colors
 
 -main
 	-main
