@@ -6,7 +6,7 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 11:11:55 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/18 15:10:39 by plouvel          ###   ########.fr       */
+/*   Updated: 2022/05/18 16:36:07 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static t_list	*get_obj(t_parser *parser, t_token_type type)
 	return (elem);
 }
 
-static void	*quit(t_parser *parser, t_parser_errcode errcode)
+static void	*quit(t_list **tkns, t_parser *parser, t_parser_errcode errcode)
 {
 	char	*tkn_value;
 
@@ -70,32 +70,49 @@ static void	*quit(t_parser *parser, t_parser_errcode errcode)
 		parser->errcode = errcode;
 	ft_lstclear(&parser->list_objs, free);
 	if (parser->errcode == E_INVALID_VALUE
-			|| parser->errcode == E_INVALID_RANGE)
+		|| parser->errcode == E_INVALID_RANGE)
 		tkn_value = parser->last_tkn_value;
 	else
 		tkn_value = parser->curr_tkn->value;
 	print_parser_errmsg(get_parser_err_msg(parser->errcode), parser->line_nbr,
-			tkn_value);
+		tkn_value);
+	ft_lstclear(tkns, free_token);
 	return (NULL);
 }
 
-t_list	*parse(t_list *list_tkns)
+static t_list	*parse_from_tkns(t_list *list_tkns)
 {
 	t_parser	parser;
 	t_list		*elem;
 
-	ft_memset(&parser, 0 ,sizeof(t_parser));
+	ft_memset(&parser, 0, sizeof(t_parser));
 	parser.list_tkns = list_tkns;
 	parser.curr_tkn = list_tkns->content;
 	while (parser.list_tkns)
 	{
 		if (!is_an_identifier(&parser))
-			return (quit(&parser, E_EXPECTED_IDENTIFIER));
+			return (quit(&list_tkns, &parser, E_EXPECTED_IDENTIFIER));
 		elem = get_obj(&parser, parser.curr_tkn->type);
 		if (!elem)
-			return (quit(&parser, E_KEEP));
+			return (quit(&list_tkns, &parser, E_KEEP));
 		ft_lstadd_back(&parser.list_objs, elem);
 		parser.line_nbr++;
 	}
+	ft_lstclear(&list_tkns, free_token);
 	return (parser.list_objs);
+}
+
+t_list	*parse_scene(const char *filename)
+{
+	t_list	*tkns;
+	t_list	*objs;
+
+	tkns = lex_from_file(filename);
+	if (!tkns)
+		return (NULL);
+	objs = parse_from_tkns(tkns);
+	if (!objs)
+		return (NULL);
+	else
+		return (objs);
 }

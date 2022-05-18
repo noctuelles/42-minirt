@@ -6,7 +6,7 @@
 /*   By: plouvel <plouvel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 15:15:43 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/18 15:24:27 by plouvel          ###   ########.fr       */
+/*   Updated: 2022/05/18 16:31:18 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ const char	*get_parser_err_msg(t_parser_errcode errcode);
 
 /* parsing.c */
 
-t_list		*parse(t_list *list_tkns);
+t_list	*parse_scene(const char *filename);
 
 /* parsing_objs.c */
 

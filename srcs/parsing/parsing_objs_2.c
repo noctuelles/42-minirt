@@ -6,7 +6,7 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 17:39:59 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/18 15:25:06 by plouvel          ###   ########.fr       */
+/*   Updated: 2022/05/18 16:34:51 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,24 +21,23 @@ t_object	*parse_cylinder(t_parser *parser)
 	char		*tkn_value;
 
 	obj.type = OBJ_CYLINDER;
-	if (parse_coords(parser, &obj.coord, set_range(0.0, 0.0)) == NULL)
+	if (!parse_coords(parser, &obj.coord, set_range(0.0, 0.0)))
 		return (NULL);
-	if (parse_coords(parser, &obj.vec, set_range(-1.0, 1.0)) == NULL)
+	if (!parse_coords(parser, &obj.vec, set_range(-1.0, 1.0)))
 		return (NULL);
-	if (check_type(parser, T_VALUE, &tkn_value, true) == NULL)
+	if (!check_type(parser, T_VALUE, &tkn_value, true))
 		return (set_parser_errcode(parser, E_EXPECTED_VALUE));
 	if (!check_double_value(parser, tkn_value, &obj.diameter, set_range(0, 0)))
 		return (NULL);
 	if (check_type(parser, T_VALUE, &tkn_value, true) == NULL)
 		return (set_parser_errcode(parser, E_EXPECTED_VALUE));
-	if (check_double_value(parser, tkn_value, &obj.height, set_range(0, 0))
-			== NULL)
+	if (!check_double_value(parser, tkn_value, &obj.height, set_range(0, 0)))
 		return (NULL);
 	if (parse_rgb(parser, &obj.rgb) == NULL)
 		return (NULL);
 	cylinder = ft_calloc(1, sizeof(t_object));
 	if (!cylinder)
-		return (set_parser_errcode(parser, E_MALLOC)); 
+		return (set_parser_errcode(parser, E_MALLOC));
 	*cylinder = obj;
 	return (cylinder);
 }

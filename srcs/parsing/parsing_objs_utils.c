@@ -6,7 +6,7 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 17:37:35 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/18 15:21:06 by plouvel          ###   ########.fr       */
+/*   Updated: 2022/05/18 16:39:33 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	*check_double_value(t_parser *parser, char *str, double *value,
 			if (is_a_dot == false)
 				is_a_dot = true;
 			else
-			return (set_parser_errcode(parser, E_INVALID_VALUE));
+				return (set_parser_errcode(parser, E_INVALID_VALUE));
 		}
 		else if (!(str[i] >= '0' && str[i] <= '9'))
 			return (set_parser_errcode(parser, E_INVALID_VALUE));
@@ -94,18 +94,19 @@ void	*check_type(t_parser *parser, t_token_type type, char **tkn_value,
 void	*parse_rgb(t_parser *parser, uint32_t *rgb)
 {
 	char	*tkn_value;
-	if (check_type(parser, T_VALUE, &tkn_value, true) == NULL
-			|| check_rgb_component(parser, 'R', tkn_value, rgb) == NULL)
+
+	if (!check_type(parser, T_VALUE, &tkn_value, true)
+		|| !check_rgb_component(parser, 'R', tkn_value, rgb))
 		return (NULL);
-	if (check_type(parser, T_COMMA, &tkn_value, true) == NULL)
+	if (!check_type(parser, T_COMMA, &tkn_value, true))
 		return (NULL);
-	if (check_type(parser, T_VALUE, &tkn_value, true) == NULL
-			|| check_rgb_component(parser, 'G', tkn_value, rgb) == NULL)
+	if (!check_type(parser, T_VALUE, &tkn_value, true)
+		|| !check_rgb_component(parser, 'G', tkn_value, rgb))
 		return (NULL);
-	if (check_type(parser, T_COMMA, &tkn_value, true) == NULL)
+	if (!check_type(parser, T_COMMA, &tkn_value, true))
 		return (NULL);
-	if (check_type(parser, T_VALUE, &tkn_value, true) == NULL
-			|| check_rgb_component(parser, 'B', tkn_value, rgb) == NULL)
+	if (!check_type(parser, T_VALUE, &tkn_value, true)
+		|| !check_rgb_component(parser, 'B', tkn_value, rgb))
 		return (NULL);
 	return (parser);
 }
@@ -114,18 +115,18 @@ void	*parse_coords(t_parser *parser, t_coord3d *coord, t_range range)
 {
 	char	*tkn_value;
 
-	if (check_type(parser, T_VALUE, &tkn_value, true) == NULL
-			|| check_double_value(parser, tkn_value, &coord->x, range) == NULL)
+	if (!check_type(parser, T_VALUE, &tkn_value, true)
+		|| !check_double_value(parser, tkn_value, &coord->x, range))
 		return (NULL);
-	if (check_type(parser, T_COMMA, &tkn_value, true) == NULL)
+	if (!check_type(parser, T_COMMA, &tkn_value, true))
 		return (NULL);
-	if (check_type(parser, T_VALUE, &tkn_value, true) == NULL
-			|| check_double_value(parser, tkn_value, &coord->y, range) == NULL)
+	if (!check_type(parser, T_VALUE, &tkn_value, true)
+		|| !check_double_value(parser, tkn_value, &coord->y, range))
 		return (NULL);
-	if (check_type(parser, T_COMMA, &tkn_value, true) == NULL)
+	if (!check_type(parser, T_COMMA, &tkn_value, true))
 		return (NULL);
-	if (check_type(parser, T_VALUE, &tkn_value, true) == NULL
-			|| check_double_value(parser, tkn_value, &coord->z, range) == NULL)
+	if (!check_type(parser, T_VALUE, &tkn_value, true)
+		|| !check_double_value(parser, tkn_value, &coord->z, range))
 		return (NULL);
 	return (parser);
 }

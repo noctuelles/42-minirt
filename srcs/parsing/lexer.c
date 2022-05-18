@@ -6,7 +6,7 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 16:54:50 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/17 17:43:21 by plouvel          ###   ########.fr       */
+/*   Updated: 2022/05/18 16:32:33 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static void	*finish_line(t_lexer *lexer)
 	return (lexer);
 }
 
-t_list	*lex_file(t_lexer *lexer)
+static t_list	*lex_file(t_lexer *lexer)
 {
 	while (lexer->file_content[lexer->line_nbr] != NULL)
 	{
@@ -78,9 +78,10 @@ t_list	*lex_file(t_lexer *lexer)
 
 t_list	*lex_from_file(const char *filename)
 {
-	t_lexer	lexer = {0};
-	size_t			i;
+	t_lexer	lexer;
+	size_t	i;
 
+	ft_memset(&lexer, 0, sizeof(lexer));
 	lexer.file_content = read_file(filename);
 	if (!lexer.file_content)
 		return (NULL);
@@ -92,7 +93,7 @@ t_list	*lex_from_file(const char *filename)
 	free(lexer.file_content);
 	return (lexer.list_tkns);
 }
-
+/*
 char *translate(t_token_type type)
 {
 	if (type == 0)
@@ -169,18 +170,8 @@ int main(int argc, char **argv)
 {
 	if (argc > 1)
 	{
-		t_list	*test_list = lex_from_file(argv[1]);
-		if (test_list)
-		{
-			print_tokens(test_list);
-			puts("");
-			t_list	*obj = parse(test_list);
-			if (obj)
-				print_objs(obj);
-			else
-				puts("an error occured during the parsing.. :(");
-			ft_lstclear(&test_list, free_token);
-			ft_lstclear(&obj, free);
-		}
+		t_list	*obj = parse_scene(argv[1]);
+		if (obj)
+			print_objs(obj);
 	}
-}
+}*/

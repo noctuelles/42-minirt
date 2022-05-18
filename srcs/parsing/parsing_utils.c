@@ -6,7 +6,7 @@
 /*   By: plouvel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 14:37:51 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/18 15:21:02 by plouvel          ###   ########.fr       */
+/*   Updated: 2022/05/18 16:32:54 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ const char	*get_parser_err_msg(t_parser_errcode errcode)
 {
 	if (errcode == E_INVALID_VALUE)
 		return (STR_INVALID_VALUE);
-	else if (errcode ==  E_INVALID_RANGE)
+	else if (errcode == E_INVALID_RANGE)
 		return (STR_INVALID_RANGE);
 	else if (errcode == E_EXPECTED_COMMA)
 		return (STR_EXPECTED_COMMA);

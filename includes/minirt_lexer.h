@@ -6,7 +6,7 @@
 /*   By: plouvel <plouvel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 15:22:59 by plouvel           #+#    #+#             */
-/*   Updated: 2022/05/18 15:25:01 by plouvel          ###   ########.fr       */
+/*   Updated: 2022/05/18 16:31:35 by plouvel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@
 # define STR_INVALID_FILE_EXTENSION "invalid file extension"
 # define STR_ERROR_FILE_READ        "an error occured during file reading"
 # define STR_EMPTY_FILE             "empty file"
-
 # define STR_TOO_MUCH_AMLIGHT       "minirt: line %u: ambiant light cannot be \
 declared more than once.\n"
 # define STR_TOO_MUCH_CAMERA        "minirt: line %u: camera cannot be \
@@ -125,6 +124,10 @@ void	*print_parser_errmsg(const char *error_msg, size_t line_nbr,
 t_token	set_token(char *str, t_token_type type);
 t_token	*new_token(char *str, size_t len, t_token_type type);
 void	free_token(void *token);
+
+/* lexer.c */
+
+t_list	*lex_from_file(const char *filename);
 
 /* lexer_utils.c */
 
