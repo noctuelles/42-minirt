@@ -6,7 +6,7 @@
 /*   By: maabidal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 00:45:01 by maabidal          #+#    #+#             */
-/*   Updated: 2022/05/22 16:40:26 by maabidal         ###   ########.fr       */
+/*   Updated: 2022/05/22 18:44:11 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ t_scene	setup_scene()
 	((t_sphere *)((t_obj_interface *)scene.objs->content)->obj)->radius = 5;
 	((t_sphere *)((t_obj_interface *)scene.objs->content)->obj)->albedo = 0x00601A5F;
 
+/*
 	scene.objs->next = malloc(sizeof(t_list));
 	scene.objs->next->content = malloc(sizeof(t_obj_interface));
 	((t_obj_interface *)scene.objs->next->content)->ray_caster = &plane_raycast;
@@ -52,7 +53,30 @@ t_scene	setup_scene()
 	((t_plane *)((t_obj_interface *)scene.objs->next->content)->obj)->pos = new_v(2, -5, 0);
 	((t_plane *)((t_obj_interface *)scene.objs->next->content)->obj)->normal = new_v(1, 0, 0);
 	((t_plane *)((t_obj_interface *)scene.objs->next->content)->obj)->albedo = 0x00601A5F;
+*/
 
+	scene.objs->next = malloc(sizeof(t_list));
+	scene.objs->next->content = malloc(sizeof(t_obj_interface));
+	((t_obj_interface *)scene.objs->next->content)->ray_caster = &cylinder_raycast;
+	((t_obj_interface *)scene.objs->next->content)->obj = malloc(sizeof(t_cylinder));
+	((t_cylinder *)((t_obj_interface *)scene.objs->next->content)->obj)->pos = new_v(-2, 0, 15);
+	((t_cylinder *)((t_obj_interface *)scene.objs->next->content)->obj)->dir = new_v(0, 0, 1);
+	((t_cylinder *)((t_obj_interface *)scene.objs->next->content)->obj)->height = 3;
+	((t_cylinder *)((t_obj_interface *)scene.objs->next->content)->obj)->radius = sqrd(2);
+	((t_cylinder *)((t_obj_interface *)scene.objs->next->content)->obj)->albedo = 0x00601A5F;
+
+/*
+	scene.objs->next->next = malloc(sizeof(t_list));
+	scene.objs->next->next->content = malloc(sizeof(t_obj_interface));
+	((t_obj_interface *)scene.objs->next->next->content)->ray_caster = &cylinder_raycast;
+	((t_obj_interface *)scene.objs->next->next->content)->obj = malloc(sizeof(t_cylinder));
+	((t_cylinder *)((t_obj_interface *)scene.objs->next->next->content)->obj)->pos = new_v(-2, 0, 15);
+	((t_cylinder *)((t_obj_interface *)scene.objs->next->next->content)->obj)->dir = new_v(0, 0, 1);
+	((t_cylinder *)((t_obj_interface *)scene.objs->next->next->content)->obj)->height = 3;
+	((t_cylinder *)((t_obj_interface *)scene.objs->next->next->content)->obj)->radius = 2;
+	((t_cylinder *)((t_obj_interface *)scene.objs->next->next->content)->obj)->albedo = 0x00601A5F;
+	scene.objs->next->next->next = NULL;
+*/
 	scene.objs->next->next = NULL;
 
 	return (scene);

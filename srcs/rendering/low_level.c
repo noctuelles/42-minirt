@@ -6,7 +6,7 @@
 /*   By: maabidal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 00:32:37 by maabidal          #+#    #+#             */
-/*   Updated: 2022/05/22 16:41:45 by maabidal         ###   ########.fr       */
+/*   Updated: 2022/05/22 18:44:31 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,9 +97,28 @@ BOOL	plane_raycast(void *plane_ptr, t_ray ray, t_rayhit *hit)
 	return (FALSE);
 }
 
-/*
-int	cylinder_raycast(void *cylinder_ptr, t_ray ray, t_rayhit *hit)
+static BOOL	tube_raycast(t_cylinder cylindre, t_ray ray, t_ayhit *hit)
 {
 
 }
-*/
+
+BOOL	cylinder_raycast(void *cylinder_ptr, t_ray ray, t_rayhit *hit)
+{
+	t_cylinder	cylinder;
+	t_rayhit	plane_hit;
+	t_plane		plane;
+
+	cylinder = *(t_cylinder *)cylinder_ptr;
+	plane.normal = cylinder.dir;
+	if (dot(plane.normal, ray.dir) > 0)
+		plane.normal = mul_d(plane.normal, -1);
+	plane.pos = sum(cylinder.pos, mul_d(plane.normal, cylinder.height));
+	plane.albedo = cylinder.albedo;
+	plane_hit.t = DBL_MAX;
+	if (plane_raycast(&plane, ray, &plane_hit) && sqrd_dist(plane_hit.point, plane.pos) <= sqrd(cylinder.radius))
+	{
+		*hit = plane_hit;
+		return (TRUE);
+	}
+	return (FALSE);
+}

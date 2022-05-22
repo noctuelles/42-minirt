@@ -6,7 +6,7 @@
 /*   By: maabidal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 23:51:05 by maabidal          #+#    #+#             */
-/*   Updated: 2022/05/17 18:36:59 by maabidal         ###   ########.fr       */
+/*   Updated: 2022/05/22 16:53:46 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ t_vec		mul_d(t_vec v, double d);
 t_vec		sum(t_vec a, t_vec b);
 t_vec		dif(t_vec a, t_vec b);
 t_vec		mul(t_vec a, t_vec b);
+double	dist(t_vec a, t_vec b);
+double	sqrd_dist(t_vec a, t_vec b);
 //div funciton already exists in stdlib
 t_vec		di(t_vec num, t_vec denum);
 t_vec		normalized(t_vec v);

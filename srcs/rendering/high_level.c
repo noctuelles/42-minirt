@@ -6,13 +6,13 @@
 /*   By: maabidal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 00:35:04 by maabidal          #+#    #+#             */
-/*   Updated: 2022/05/22 16:38:23 by maabidal         ###   ########.fr       */
+/*   Updated: 2022/05/22 18:38:05 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rendering.h"
-BOOL	test;
 
+#include <stdio.h>
 static BOOL	cast_ray(t_ray ray, t_list *objs, t_rayhit *hit)
 {
 	BOOL			current;
@@ -51,6 +51,8 @@ static t_col	render_pixel(t_scene scene, t_ray cam_ray)
 	if (cast_ray(cam_ray, scene.objs, &hit))
 	{
 		col = mult_colors(hit.albedo, scene.ambiant_light);
+//		if (hit.normal.x == -1 && hit.normal.y == 0 && hit.normal.z == 0)
+//			printf("albedo = %X\n", hit.albedo);
 		to_light = dif(scene.light.pos, hit.point);
 		to_light_norm = normalized(to_light);
 		hit.t = DBL_MAX;

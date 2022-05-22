@@ -6,7 +6,7 @@
 /*   By: maabidal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 00:52:11 by maabidal          #+#    #+#             */
-/*   Updated: 2022/05/19 22:21:29 by maabidal         ###   ########.fr       */
+/*   Updated: 2022/05/22 17:05:01 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,6 @@ extern BOOL	test;
 t_ray	mk_camray(t_camera cam, int x, int y);
 BOOL	sphere_raycast(void *sphere, t_ray ray, t_rayhit *hit);
 BOOL	plane_raycast(void *plane_ptr, t_ray ray, t_rayhit *hit);
+BOOL	cylinder_raycast(void *cylinder_ptr, t_ray ray, t_rayhit *hit);
 void	render_img(t_col *img, t_scene scene);
 #endif

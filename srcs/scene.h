@@ -6,7 +6,7 @@
 /*   By: maabidal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 00:55:22 by maabidal          #+#    #+#             */
-/*   Updated: 2022/05/19 19:04:49 by maabidal         ###   ########.fr       */
+/*   Updated: 2022/05/22 16:43:52 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ typedef struct e_plane
 typedef struct e_cylinder
 {
 	t_vec		pos;
-	t_vec		vec;
+	t_vec		dir;
 	double		radius;
 	double		height;
 	t_col		albedo;
