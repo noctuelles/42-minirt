@@ -6,7 +6,7 @@
 /*   By: maabidal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 00:55:22 by maabidal          #+#    #+#             */
-/*   Updated: 2022/05/18 23:51:51 by maabidal         ###   ########.fr       */
+/*   Updated: 2022/05/19 19:04:49 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,15 +58,15 @@ typedef struct e_sphere
 {
 	t_vec		center;
 	double		radius;
-	t_col		rgb;
+	t_col		albedo;
 }				t_sphere;
 
-typedef struct e_plan
+typedef struct e_plane
 {
 	t_vec		pos;
-	t_vec		vec;
-	t_col		rgb;
-}				t_plan;
+	t_vec		normal;
+	t_col		albedo;
+}				t_plane;
 
 typedef struct e_cylinder
 {
@@ -74,7 +74,7 @@ typedef struct e_cylinder
 	t_vec		vec;
 	double		radius;
 	double		height;
-	t_col		rgb;
+	t_col		albedo;
 }				t_cylinder;
 
 typedef struct s_scene

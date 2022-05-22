@@ -6,7 +6,7 @@
 /*   By: maabidal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 00:32:37 by maabidal          #+#    #+#             */
-/*   Updated: 2022/05/18 23:51:12 by maabidal         ###   ########.fr       */
+/*   Updated: 2022/05/22 16:21:58 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,18 +72,33 @@ t_ray	mk_camray(t_camera cam, int x, int y)
 	return (ray);
 }
 
+#include <stdio.h>
+BOOL	plane_raycast(void *plane_ptr, t_ray ray, t_rayhit *hit)
+{
+	double	denominator;
+	double	enumerator;
+	double	t;
+	t_plane	plane;
+
+	plane = *((t_plane *)plane_ptr);
+	denominator = dot(plane.normal, ray.dir);
+	if (denominator == 0)
+		return (FALSE);
+	enumerator = dot(dif(plane.pos, ray.origin), plane.normal);
+	t = enumerator / denominator;
+	if (t > 0 && t < hit->t)
+	{
+		hit->t = t;
+		hit->point = sum(ray.origin, mul_d(ray.dir, t));
+		hit->normal = plane.normal;
+		hit->albedo = WHITE;
+		return (TRUE);
+	}
+	return (FALSE);
+}
+
 /*
-int	plane_ray_cast(t_plane plane, t_ray ray)
-{
-
-}
-
-int	cylinder_ray_cast(t_sphere cylinder, t_ray ray)
-{
-
-}
-
-int	2nd_degree_shape_ray_cast(t_??, t_ray ray)
+int	cylinder_raycast(void *cylinder_ptr, t_ray ray, t_rayhit *hit)
 {
 
 }

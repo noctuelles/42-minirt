@@ -6,7 +6,7 @@
 /*   By: maabidal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 00:45:01 by maabidal          #+#    #+#             */
-/*   Updated: 2022/05/18 23:47:45 by maabidal         ###   ########.fr       */
+/*   Updated: 2022/05/19 22:45:09 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,24 @@ t_scene	setup_scene()
 	scene.camera.pos = new_v(0, 0, 0);
 	scene.camera.fov = 70.0;
 	scene.ambiant_light = 0x00900A0F;
-	
+
 	scene.objs = malloc(sizeof(t_list));
+
 	scene.objs->content = malloc(sizeof(t_obj_interface));
 	((t_obj_interface *)scene.objs->content)->ray_caster = &sphere_raycast;
 	((t_obj_interface *)scene.objs->content)->obj = malloc(sizeof(t_sphere));
-	((t_sphere *)((t_obj_interface *)scene.objs->content)->obj)->center = new_v(0, 0, 15);
+	((t_sphere *)((t_obj_interface *)scene.objs->content)->obj)->center = new_v(5, -2, 15);
 	((t_sphere *)((t_obj_interface *)scene.objs->content)->obj)->radius = 5;
-	scene.objs->next = NULL;
+
+	scene.objs->next = malloc(sizeof(t_list));
+	scene.objs->next->content = malloc(sizeof(t_obj_interface));
+	((t_obj_interface *)scene.objs->next->content)->ray_caster = &plane_raycast;
+	((t_obj_interface *)scene.objs->next->content)->obj = malloc(sizeof(t_plane));
+	((t_plane *)((t_obj_interface *)scene.objs->next->content)->obj)->pos = new_v(2, -5, 0);
+	((t_plane *)((t_obj_interface *)scene.objs->next->content)->obj)->normal = new_v(1, 0, 0);
+	((t_plane *)((t_obj_interface *)scene.objs->next->content)->obj)->albedo = WHITE;
+
+	scene.objs->next->next = NULL;
 
 	return (scene);
 }

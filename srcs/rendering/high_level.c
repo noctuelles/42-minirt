@@ -6,11 +6,12 @@
 /*   By: maabidal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 00:35:04 by maabidal          #+#    #+#             */
-/*   Updated: 2022/05/19 15:30:55 by maabidal         ###   ########.fr       */
+/*   Updated: 2022/05/19 23:07:39 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rendering.h"
+BOOL	test;
 
 static BOOL	cast_ray(t_ray ray, t_list *objs, t_rayhit *hit)
 {
@@ -24,31 +25,32 @@ static BOOL	cast_ray(t_ray ray, t_list *objs, t_rayhit *hit)
 	return (interface->ray_caster(interface->obj, ray, hit) || next);
 }
 
-static t_ray new_ray(t_vec origin, t_vec direction)
+static t_ray mk_lightray(t_vec point, t_vec to_light)
 {
-	t_ray ray;
+	t_ray	light_ray;
 
-	ray.origin = origin;
-	ray.dir = direction;
-	return (ray);
+	to_light = normalized(to_light);
+	light_ray.dir = to_light;
+	light_ray.origin = sum(point, mul_d(to_light, 0.01));
+	return (light_ray);
 }
 
 static t_col	render_pixel(t_scene scene, t_ray cam_ray)
 {
 	t_rayhit	hit;
 	t_vec		to_light;
+	t_vec		to_light_norm;
 	double		lighting;
 	t_col		col;
-	t_ray		light_ray;
 
 	hit.t = DBL_MAX;
 	if (cast_ray(cam_ray, scene.objs, &hit))
 	{
 		col = mult_colors(hit.albedo, scene.ambiant_light);
 		to_light = dif(scene.light.pos, hit.point);
-		light_ray = new_ray(hit.point, normalized(to_light));
-		light_ray.origin = sum(light_ray.origin, mul_d(light_ray.dir, 0.001));
-		if (!cast_ray(light_ray, scene.objs, &hit))
+		to_light_norm = normalized(to_light);
+		hit.t = DBL_MAX;
+		if (!cast_ray(mk_lightray(hit.point, to_light_norm), scene.objs, &hit))
 		{
 			lighting = dot(hit.normal, normalized(to_light));
 			lighting *= scene.light.intensity / sqrd(magnitude(to_light) + 1.0);
@@ -65,6 +67,7 @@ void	render_img(t_col *img, t_scene scene)
 	int		y;
 	t_ray	cam_ray;
 
+//test = TRUE;
 	x = -1;
 	while (++x < WIN_WIDTH)
 	{

@@ -1,6 +1,5 @@
--make raytracer
--plan (prendre en compte le cas ou le plan et parallele au ray)
 -cylindre(utiliser le code de plan pour cylindre)
+-changer la normale si la camera est a l'interieur de la sphere
 -camera rotation
 -parsing
 -window gestion
