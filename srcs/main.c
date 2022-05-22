@@ -6,7 +6,7 @@
 /*   By: maabidal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 00:45:01 by maabidal          #+#    #+#             */
-/*   Updated: 2022/05/19 22:45:09 by maabidal         ###   ########.fr       */
+/*   Updated: 2022/05/22 16:40:26 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ t_scene	setup_scene()
 	((t_obj_interface *)scene.objs->content)->obj = malloc(sizeof(t_sphere));
 	((t_sphere *)((t_obj_interface *)scene.objs->content)->obj)->center = new_v(5, -2, 15);
 	((t_sphere *)((t_obj_interface *)scene.objs->content)->obj)->radius = 5;
+	((t_sphere *)((t_obj_interface *)scene.objs->content)->obj)->albedo = 0x00601A5F;
 
 	scene.objs->next = malloc(sizeof(t_list));
 	scene.objs->next->content = malloc(sizeof(t_obj_interface));
@@ -50,7 +51,7 @@ t_scene	setup_scene()
 	((t_obj_interface *)scene.objs->next->content)->obj = malloc(sizeof(t_plane));
 	((t_plane *)((t_obj_interface *)scene.objs->next->content)->obj)->pos = new_v(2, -5, 0);
 	((t_plane *)((t_obj_interface *)scene.objs->next->content)->obj)->normal = new_v(1, 0, 0);
-	((t_plane *)((t_obj_interface *)scene.objs->next->content)->obj)->albedo = WHITE;
+	((t_plane *)((t_obj_interface *)scene.objs->next->content)->obj)->albedo = 0x00601A5F;
 
 	scene.objs->next->next = NULL;
 

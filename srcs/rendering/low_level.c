@@ -6,7 +6,7 @@
 /*   By: maabidal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 00:32:37 by maabidal          #+#    #+#             */
-/*   Updated: 2022/05/22 16:21:58 by maabidal         ###   ########.fr       */
+/*   Updated: 2022/05/22 16:41:45 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ BOOL	sphere_raycast(void *sphere, t_ray ray, t_rayhit *hit)
 			hit->t = inters[1];
 		hit->point = sum(mul_d(ray.dir, hit->t), ray.origin);
 		hit->normal = normalized(dif(hit->point, ((t_sphere *)sphere)->center));
-		hit->albedo = 0x00601A5F;
+		hit->albedo = ((t_sphere *)sphere)->albedo;
 		return (TRUE);
 	}
 	return (FALSE);
@@ -91,7 +91,7 @@ BOOL	plane_raycast(void *plane_ptr, t_ray ray, t_rayhit *hit)
 		hit->t = t;
 		hit->point = sum(ray.origin, mul_d(ray.dir, t));
 		hit->normal = plane.normal;
-		hit->albedo = WHITE;
+		hit->albedo = plane.albedo;
 		return (TRUE);
 	}
 	return (FALSE);

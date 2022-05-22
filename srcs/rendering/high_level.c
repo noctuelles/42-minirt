@@ -6,7 +6,7 @@
 /*   By: maabidal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 00:35:04 by maabidal          #+#    #+#             */
-/*   Updated: 2022/05/19 23:07:39 by maabidal         ###   ########.fr       */
+/*   Updated: 2022/05/22 16:38:23 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,18 @@ BOOL	test;
 
 static BOOL	cast_ray(t_ray ray, t_list *objs, t_rayhit *hit)
 {
-	int				next;
+	BOOL			current;
+	BOOL			next;
 	t_obj_interface	*interface;
 
 	if (objs == NULL)
 		return (FALSE);
 	next = cast_ray(ray, objs->next, hit);
 	interface = (t_obj_interface *)objs->content;
-	return (interface->ray_caster(interface->obj, ray, hit) || next);
+	current = interface->ray_caster(interface->obj, ray, hit);
+	if (current && dot(hit->normal, ray.dir) > 0)
+		hit->normal = mul_d(hit->normal, -1);
+	return (current || next);
 }
 
 static t_ray mk_lightray(t_vec point, t_vec to_light)
