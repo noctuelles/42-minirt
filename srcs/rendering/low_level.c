@@ -6,26 +6,26 @@
 /*   By: maabidal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 00:32:37 by maabidal          #+#    #+#             */
-/*   Updated: 2022/05/22 18:44:31 by maabidal         ###   ########.fr       */
+/*   Updated: 2022/05/23 20:09:04 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#include <stdio.h>
 
 #include "rendering.h"
-
-/*
-BOOL	is_a_hit(double inters, t_rayhit *hit)
-{
-	if(*inters > 0 && *inters < hit->t)
-		return (TRUE); 
-	return (inters[1] > 0 && inters[1] < hit->t);
-}
-*/
 
 BOOL	are_hits(double *inters, t_rayhit *hit)
 {
 	if(*inters > 0 && *inters < hit->t)
+	{
+		hit->t = *inters;
 		return (TRUE); 
-	return (inters[1] > 0 && inters[1] < hit->t);
+	}
+	if (inters[1] > 0 && inters[1] < hit->t)
+	{
+		hit->t = inters[1];
+		return (TRUE);
+	}
+	return (FALSE);
 }
 
 BOOL	sphere_raycast(void *sphere, t_ray ray, t_rayhit *hit)
@@ -42,10 +42,6 @@ BOOL	sphere_raycast(void *sphere, t_ray ray, t_rayhit *hit)
 	c = sqrd_mag(co) - sqrd(((t_sphere *)sphere)->radius);
 	if (solve_2nd_degree(a, b, c, inters) && are_hits(inters, hit))
 	{
-		if (inters[0] > 0)
-			hit->t = inters[0];
-		else if (inters[1] > 0)
-			hit->t = inters[1];
 		hit->point = sum(mul_d(ray.dir, hit->t), ray.origin);
 		hit->normal = normalized(dif(hit->point, ((t_sphere *)sphere)->center));
 		hit->albedo = ((t_sphere *)sphere)->albedo;
@@ -72,7 +68,6 @@ t_ray	mk_camray(t_camera cam, int x, int y)
 	return (ray);
 }
 
-#include <stdio.h>
 BOOL	plane_raycast(void *plane_ptr, t_ray ray, t_rayhit *hit)
 {
 	double	denominator;
@@ -97,18 +92,11 @@ BOOL	plane_raycast(void *plane_ptr, t_ray ray, t_rayhit *hit)
 	return (FALSE);
 }
 
-static BOOL	tube_raycast(t_cylinder cylindre, t_ray ray, t_ayhit *hit)
+static BOOL	disk_raycast(t_cylinder cylinder, t_ray ray, t_rayhit *hit)
 {
-
-}
-
-BOOL	cylinder_raycast(void *cylinder_ptr, t_ray ray, t_rayhit *hit)
-{
-	t_cylinder	cylinder;
 	t_rayhit	plane_hit;
 	t_plane		plane;
 
-	cylinder = *(t_cylinder *)cylinder_ptr;
 	plane.normal = cylinder.dir;
 	if (dot(plane.normal, ray.dir) > 0)
 		plane.normal = mul_d(plane.normal, -1);
@@ -118,6 +106,52 @@ BOOL	cylinder_raycast(void *cylinder_ptr, t_ray ray, t_rayhit *hit)
 	if (plane_raycast(&plane, ray, &plane_hit) && sqrd_dist(plane_hit.point, plane.pos) <= sqrd(cylinder.radius))
 	{
 		*hit = plane_hit;
+		return (TRUE);
+	}
+	return (FALSE);
+}
+
+//a is first used as a in a 2nd degree equation,
+//and then as the "t" on cylinder's ray.
+BOOL	tube_raycast(t_cylinder cyl, t_ray ray, t_rayhit *hit, double *inters)
+{
+	t_vec	a_v;
+	t_vec	b_v;
+	double	a;
+	double	b;
+	double	c;
+
+	a_v = mul_d(cyl.dir, dot(cyl.dir, ray.dir));
+	b_v = sum(cyl.pos, mul_d(cyl.dir, dot(cyl.dir, dif(ray.origin, cyl.pos))));
+	a = sqrd_mag(dif(ray.dir, a_v));
+	b = dot(dif(ray.origin, b_v), dif(ray.dir, a_v)) * 2;
+	c = sqrd_mag(dif(ray.origin, b_v)) - sqrd(cyl.radius);
+	if (solve_2nd_degree(a, b, c, inters) && are_hits(inters, hit))
+	{
+		hit->point = sum(ray.origin, mul_d(ray.dir, hit->t));
+		a = dot(cyl.dir, dif(hit->point, cyl.pos));
+		a_v = sum(cyl.pos, mul_d(cyl.dir, a));
+		hit->normal = normalized(dif(hit->point, a_v));
+		hit->albedo = cyl.albedo;
+		if (a >= -cyl.height && a <= cyl.height)
+			return (TRUE);
+	}
+	return (FALSE);
+}
+
+BOOL	cylinder_raycast(void *cylinder_ptr, t_ray ray, t_rayhit *hit)
+{
+	t_cylinder	cyl;
+	double		inters[2];
+	t_rayhit	tube_hit;
+
+	cyl = *(t_cylinder *)cylinder_ptr;
+	if (disk_raycast(cyl, ray, hit))
+		return (TRUE);
+	tube_hit.t = DBL_MAX;
+	if (tube_raycast(cyl, ray, &tube_hit, inters))
+	{
+		*hit = tube_hit;
 		return (TRUE);
 	}
 	return (FALSE);

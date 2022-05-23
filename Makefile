@@ -32,7 +32,7 @@ SRCS =	main.c\
 
 LIBFT = inc/libft/libft.a
 
-CFLAGS = -Wall -Werror -Wextra -g3 -MMD
+CFLAGS = #-Wall -Werror -Wextra -g3 -MMD
 
 OBJDIR = objs
 SRCDIR = srcs

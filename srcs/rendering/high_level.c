@@ -6,7 +6,7 @@
 /*   By: maabidal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 00:35:04 by maabidal          #+#    #+#             */
-/*   Updated: 2022/05/22 18:38:05 by maabidal         ###   ########.fr       */
+/*   Updated: 2022/05/23 16:15:35 by maabidal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ static t_col	render_pixel(t_scene scene, t_ray cam_ray)
 	if (cast_ray(cam_ray, scene.objs, &hit))
 	{
 		col = mult_colors(hit.albedo, scene.ambiant_light);
-//		if (hit.normal.x == -1 && hit.normal.y == 0 && hit.normal.z == 0)
-//			printf("albedo = %X\n", hit.albedo);
 		to_light = dif(scene.light.pos, hit.point);
 		to_light_norm = normalized(to_light);
 		hit.t = DBL_MAX;
@@ -73,7 +71,6 @@ void	render_img(t_col *img, t_scene scene)
 	int		y;
 	t_ray	cam_ray;
 
-//test = TRUE;
 	x = -1;
 	while (++x < WIN_WIDTH)
 	{
@@ -85,17 +82,3 @@ void	render_img(t_col *img, t_scene scene)
 		}
 	}
 }
-
-
-/*
-t_sphere	sphere;
-t_camera	cam;
-t_light	light;
-
-light.pos = new_v(-5, 8, 10);
-sphere.center = new_v(0, 0, 15);
-sphere.radius = 5;
-cam.dir = new_v(0, 0, 1);
-cam.pos = new_v(0, 0, 0);
-cam.fov = 70.0;
-*/
